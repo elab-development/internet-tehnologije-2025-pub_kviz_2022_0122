@@ -12,6 +12,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@theme {
+  --color-pub-orange: #E2A16F;
+  --color-pub-gray: #979797;
+  --color-pub-beige: #FFF0DD;
+  --color-pub-blue: #6E9DAB;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
