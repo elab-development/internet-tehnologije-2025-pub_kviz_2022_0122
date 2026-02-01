@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useState } from 'react';
-import Image from 'next/image';
+import Link from "next/link";
+import { useState } from "react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'Events' },
-    { href: '/profile', label: 'Profile' },
+    { href: "/", label: "Početna" },
+    { href: "/events", label: "Događaji" },
+    { href: "/profile", label: "Profil" },
   ];
 
   const toggleMenu = () => {
@@ -18,38 +18,39 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="absolute top-0 left-0 right-0 bg-transparent h-25 text-black shadow-lg z-50 justify-center">
+    <nav className=" absolute top-0 left-0 right-0 z-50 h-25 backdrop-blur-xs border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 justify-center h-full">
         <div className="flex justify-between items-center h-full">
-          {/* Logo */}
-          <div className="flex-shrink-0 mr-12">
-            <Link href="/" className="text-2xl font-bold text-blue-400">
-              <Image src="/pubquiz-logo.png" alt="PubQuiz Logo" width={75} height={75} />
+          <div className="shrink-0 mr-12">
+            <Link href="/" className="text-2xl font-bold">
+              <Image
+                src="/logo-beli-pubquiz.png"
+                alt="PubQuiz Logo"
+                width={75}
+                height={75}
+                className="hover:scale-105 transition-transform hover:brightness-110 duration-500"
+              />
             </Link>
           </div>
-
-          {/* Desktop Menu */}
-          <ul className="hidden md:flex space-x-8 text-lg">
+          <ul className="hidden md:flex space-x-15 text-md">
             {menuItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="hover:text-pub-gray transition duration-300"
+                  className="inline-block text-white font-semibold hover:text-pub-beige hover:scale-110 transition-transform duration-500"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
           </ul>
-
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md hover:bg-slate-700 transition"
+              className="inline-flex items-center justify-center p-2 rounded-md cursor-pointer hover:scale-105 transition"
             >
               <svg
-                className={`h-6 w-6 transition ${isOpen ? 'rotate-90' : ''}`}
+                className={`h-6 w-6 transition ${isOpen ? "rotate-90" : ""}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -65,16 +66,14 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-slate-700">
+        <div className="md:hidden bg-transparent">
           <ul className="px-2 pt-2 pb-3 space-y-1 text-lg">
             {menuItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="block px-3 py-2 rounded-md hover:bg-slate-600 transition"
+                  className="block px-3 py-2 border-gray-700 border-b-2  hover:bg-slate-600"
                 >
                   {item.label}
                 </Link>
