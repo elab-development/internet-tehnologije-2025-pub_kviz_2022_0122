@@ -13,10 +13,10 @@
 }
 
 @theme {
-  --color-pub-orange: #E2A16F;
+  --color-pub-orange: #e2a16f;
   --color-pub-gray: #979797;
-  --color-pub-beige: #FFF0DD;
-  --color-pub-blue: #6E9DAB;
+  --color-pub-beige: #fff0dd;
+  --color-pub-blue: #a7c8d2;
 }
 
 @media (prefers-color-scheme: dark) {
