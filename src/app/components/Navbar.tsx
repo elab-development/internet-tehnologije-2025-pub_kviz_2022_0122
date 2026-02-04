@@ -3,15 +3,10 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import { menuItems } from "../../constants/menuItems";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const menuItems = [
-    { href: "/", label: "Početna" },
-    { href: "/events", label: "Događaji" },
-    { href: "/profile", label: "Profil" },
-  ];
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
