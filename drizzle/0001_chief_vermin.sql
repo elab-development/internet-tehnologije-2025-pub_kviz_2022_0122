@@ -1,0 +1,16 @@
+CREATE TABLE "seasons" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"league_id" integer NOT NULL,
+	"name" varchar(100) NOT NULL,
+	"is_active" boolean DEFAULT true NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "teams" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(100) NOT NULL,
+	"captain_id" integer NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "seasons" ADD CONSTRAINT "seasons_league_id_leagues_id_fk" FOREIGN KEY ("league_id") REFERENCES "public"."leagues"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "teams" ADD CONSTRAINT "teams_captain_id_users_id_fk" FOREIGN KEY ("captain_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
