@@ -2,16 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import Image from "next/image";
+import { menuItems } from "../constants/menuItems";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
-  const menuItems = [
-    { href: "/", label: "Početna" },
-    { href: "/events", label: "Događaji" },
-    { href: "/profile", label: "Profil" },
-  ];
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,17 +14,11 @@ export default function Navbar() {
 
   return (
     <nav className=" absolute top-0 left-0 right-0 z-50 h-25 backdrop-blur-xs border-b border-white/10 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 justify-center h-full">
+      <div className="max-w-7xl container mx-auto px-4 sm:px-6 lg:px-8 justify-center h-full">
         <div className="flex justify-between items-center h-full">
           <div className="shrink-0 mr-12">
             <Link href="/" className="text-2xl font-bold">
-              <Image
-                src="/logo-beli-pubquiz.png"
-                alt="PubQuiz Logo"
-                width={75}
-                height={75}
-                className="hover:scale-105 transition-transform hover:brightness-110 duration-500"
-              />
+              <Logo width={75} height={75} src="/logo-beli-pubquiz.png" />
             </Link>
           </div>
           <ul className="hidden md:flex space-x-15 text-md">
