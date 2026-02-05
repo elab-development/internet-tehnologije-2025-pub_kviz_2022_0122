@@ -13,7 +13,7 @@ import {
 import { db } from "./index";
 import bcrypt from "bcrypt";
 
-const hash = await bcrypt.hash("1233", 10);
+const hash = await bcrypt.hash("admin", 10);
 
 await db.transaction(async (tx) => {
   // Delete all data in reverse order of dependencies
