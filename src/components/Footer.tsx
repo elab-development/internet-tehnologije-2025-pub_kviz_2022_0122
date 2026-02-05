@@ -4,7 +4,13 @@ import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="bg-pub-gray text-black">
+    <footer
+      className="bg-pub-gray text-black"
+      style={{
+        backgroundImage:
+          "radial-gradient(circle at center, rgba(255,255,255,0.85) 0%, transparent 65%)",
+      }}
+    >
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="mb-10 flex justify-center items-center gap-3">
           <Link href="/" className="text-2xl font-bold">

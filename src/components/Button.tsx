@@ -1,4 +1,3 @@
-// components/ui/ButtonLink.tsx
 import Link from "next/link";
 
 type Props = {
@@ -10,7 +9,7 @@ export default function ButtonLink({ href, label }: Props) {
   return (
     <Link
       href={href}
-      className="inline-flex items-center justify-center rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-neutral-800"
+      className="inline-flex text-center w-50 h-12 border-2 border-pub-orange items-center justify-center rounded-lg bg-pub-beige px-4 py-2 text-[1em] font-semibold text-pub-orange transition duration-500 hover:bg-pub-orange hover:text-pub-beige"
     >
       {label}
     </Link>
