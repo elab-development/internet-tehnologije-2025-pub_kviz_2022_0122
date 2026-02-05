@@ -13,7 +13,7 @@ type Props = {
 export default function TeamSection({ team }: Props) {
   return (
     <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-white/10 p-6 mt-20 w-full">
-      <h2 className="mb-4 text-2xl font-semibold">
+      <h2 className="mb-4 xl:text-4xl text-2xl font-semibold">
         Želiš da učestvuješ u kvizu?
       </h2>
 
