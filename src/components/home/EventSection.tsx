@@ -33,7 +33,7 @@ export default function EventSection() {
         </div>
 
         <div className="hidden md:block overflow-x-auto">
-          <table className="min-w-full bg-white rounded-lg overflow-hidden">
+          <table className="min-w-full bg-white overflow-hidden">
             <thead className="bg-pub-blue">
               <tr>
                 {eventsTableItems.map((item) => (
@@ -51,7 +51,7 @@ export default function EventSection() {
               {events.map((event) => (
                 <tr
                   key={event.id}
-                  className="border-b border-pub-blue text-pub-blue"
+                  className="border border-pub-blue text-pub-blue"
                 >
                   {eventsTableItems.map((item) => (
                     <td key={item.key} className="px-4 py-4">

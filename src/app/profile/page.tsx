@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/components/AuthProvider";
+import Button from "@/components/Button";
 
 export default function LogoutButton() {
   const { logout, status, user } = useAuth();
@@ -10,11 +11,9 @@ export default function LogoutButton() {
   console.log("User in LogoutButton", user);
 
   return (
-    <button
-      onClick={logout}
-      className="px-4 py-2 bg-red-500 text-white rounded size-100"
-    >
-      {user?.name} - {user?.email} - Logout
-    </button>
+    <div className="w-full h-screen flex items-center justify-center bg-pub-blue">
+      {" "}
+      <Button onClick={logout} label="Odjavi se"></Button>
+    </div>
   );
 }
