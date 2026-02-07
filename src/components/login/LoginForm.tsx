@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Button from "./Button";
+import Button from "../Button";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -100,6 +100,15 @@ export default function LoginForm() {
             type="submit"
           />
         </form>
+        <p className="text-center mt-4 text-black">
+          Nemate nalog?{" "}
+          <a
+            href="/register"
+            className="text-pub-orange hover:underline font-semibold"
+          >
+            Registruj se
+          </a>
+        </p>
       </div>
     </div>
   );
