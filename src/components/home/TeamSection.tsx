@@ -34,7 +34,7 @@ export default function TeamSection({ team }: Props) {
             Još nisi deo nijednog tima. Pridruži se sada i počni da učestvuješ u
             kvizovima sa prijateljima!
           </p>
-          <Button href="/my-team" label="Pridruži se timu" />
+          <Button href="/api/team" label="Pridruži se timu" />
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/components/AuthProvider";
 import Button from "@/components/Button";
+import { MyTeam } from "@/components/teams/MyTeam";
 
 export default function LogoutButton() {
   const { logout, status, user } = useAuth();
@@ -21,6 +22,7 @@ export default function LogoutButton() {
   return (
     <div className="w-full h-screen flex items-center justify-center bg-pub-blue">
       {" "}
+      <MyTeam userId={user?.id} />
       <Button onClick={logout} label="Odjavi se"></Button>
     </div>
   );

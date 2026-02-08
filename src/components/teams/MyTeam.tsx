@@ -10,7 +10,11 @@ type TeamResponse = {
   };
 };
 
-export const MyTeam: React.FC = () => {
+type MyTeamProps = {
+  userId?: string | number;
+};
+
+export const MyTeam: React.FC<MyTeamProps> = ({ userId }) => {
   const [teamData, setTeamData] = useState<TeamResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +22,8 @@ export const MyTeam: React.FC = () => {
   useEffect(() => {
     const fetchTeamData = async () => {
       try {
-        const response = await fetch("/api/team", {
+        const url = userId ? `/api/team?id=${encodeURIComponent(String(userId))}` : "/api/team";
+        const response = await fetch(url, {
           credentials: "include",
         });
         const data = await response.json();
@@ -32,7 +37,7 @@ export const MyTeam: React.FC = () => {
     };
 console.log("MyTeam component - teamData:", teamData, "loading:", loading, "error:", error);
     fetchTeamData();
-  }, []);
+  }, [userId]);
 
   
   if (loading) return <div>Loading...</div>;
