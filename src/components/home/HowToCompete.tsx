@@ -35,10 +35,6 @@ export default function HowItWorks() {
                   {step.number}
                 </div>
 
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {step.icon}
-                </div>
-
                 <h3 className="text-xl font-bold mb-3 text-white group-hover:text-pub-orange transition-colors">
                   {step.title}
                 </h3>
@@ -78,7 +74,6 @@ export default function HowItWorks() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
           <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
-            <div className="text-4xl mb-3">⚡</div>
             <h4 className="font-bold mb-2">Brza registracija</h4>
             <p className="text-sm text-white/70">
               Proces traje manje od 2 minuta
@@ -86,13 +81,11 @@ export default function HowItWorks() {
           </div>
 
           <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
-            <div className="text-4xl mb-3">🆓</div>
             <h4 className="font-bold mb-2">Potpuno besplatno</h4>
             <p className="text-sm text-white/70">Bez skrivenih troškova</p>
           </div>
 
           <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl p-6 text-center">
-            <div className="text-4xl mb-3">🏆</div>
             <h4 className="font-bold mb-2">Osvoji nagrade</h4>
             <p className="text-sm text-white/70">Vredne nagrade za pobednike</p>
           </div>

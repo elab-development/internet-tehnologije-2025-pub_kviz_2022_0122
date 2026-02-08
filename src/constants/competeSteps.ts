@@ -1,7 +1,6 @@
 export const steps = [
   {
     number: "01",
-    icon: "✍️",
     title: "Registruj se",
     description:
       "Napravi svoj nalog na sajtu popunjavanjem kratke forme sa osnovnim podacima.",
@@ -9,7 +8,6 @@ export const steps = [
   },
   {
     number: "02",
-    icon: "🔐",
     title: "Prijavi se",
     description:
       "Uloguj se u aplikaciju sa svojim kredencijalima i pristupi svim funkcijama.",
@@ -17,7 +15,6 @@ export const steps = [
   },
   {
     number: "03",
-    icon: "👥",
     title: "Pridruži se timu",
     description:
       "Pronađi tim koji ti odgovara i pošalji zahtev za članstvo ili napravi vlastiti tim.",
@@ -25,7 +22,6 @@ export const steps = [
   },
   {
     number: "04",
-    icon: "🎯",
     title: "Takmiči se",
     description: "Učestvuj u kvizovima sa svojim timom i osvajaj nagrade!",
     color: "from-purple-500 to-blue-500",

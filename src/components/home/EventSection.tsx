@@ -169,7 +169,6 @@ export default function EventSection() {
                     )}
 
                     <div className="flex items-center gap-3 text-white/90">
-                      <span className="text-pub-orange text-xl">📍</span>
                       <div>
                         <div className="text-xs text-white/60">Lokacija</div>
                         <div className="font-semibold">
@@ -179,7 +178,6 @@ export default function EventSection() {
                     </div>
 
                     <div className="flex items-center gap-3 text-white/90">
-                      <span className="text-pub-orange text-xl">🕐</span>
                       <div>
                         <div className="text-xs text-white/60">Vreme</div>
                         <div className="font-semibold">
@@ -189,7 +187,6 @@ export default function EventSection() {
                     </div>
 
                     <div className="flex items-center gap-3 text-white/90">
-                      <span className="text-pub-orange text-xl">👥</span>
                       <div>
                         <div className="text-xs text-white/60">Kapacitet</div>
                         <div className="font-semibold">
