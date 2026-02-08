@@ -27,8 +27,8 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Pogesan email ili lozinka" }, { status: 401 })
     }
 
-    const token = signAuthToken({ sub: u.id.toString(), email: u.email, name: u.name })
-    const res = NextResponse.json({ id: u.id, name: u.name, email: u.email })
+    const token = signAuthToken({ sub: u.id.toString(), email: u.email, name: u.name, role: u.role })
+    const res = NextResponse.json({ id: u.id, name: u.name, email: u.email, role: u.role })
     res.cookies.set(AUTH_COOKIE, token, cookieOpts());
     return res;
 
