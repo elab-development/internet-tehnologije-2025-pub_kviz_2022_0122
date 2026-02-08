@@ -24,30 +24,33 @@ async function getAllEvents(): Promise<EventItem[]> {
 }
 
 export async function GET(req: NextRequest) {
-  try{
+  try {
     const cookieStore = await cookies();
-        const token = cookieStore.get(AUTH_COOKIE)?.value;
-    
-        if (!token) {
-          return NextResponse.json({ error: "Niste ulogovani" }, { status: 401 });
-        }
-    
-        let claims;
-        try {
-          claims = verifyAuthToken(token);
-        } catch (err) {
-          return NextResponse.json({ error: "Token je istekao ili je nevalidan" }, { status: 401 });
-        }
+    const token = cookieStore.get(AUTH_COOKIE)?.value;
 
-        const all = await getAllEvents();
-  const now = new Date();
+    if (!token) {
+      return NextResponse.json({ error: "Niste ulogovani" }, { status: 401 });
+    }
 
-  const upcoming = all.filter(
-    (e) => new Date(e.date).getTime() >= now.getTime(),
-  );
+    let claims;
+    try {
+      claims = verifyAuthToken(token);
+    } catch (err) {
+      return NextResponse.json(
+        { error: "Token je istekao ili je nevalidan" },
+        { status: 401 },
+      );
+    }
 
-  return NextResponse.json(upcoming);
-  }catch (error) {
+    const all = await getAllEvents();
+    const now = new Date();
+
+    const upcoming = all.filter(
+      (e) => new Date(e.date).getTime() >= now.getTime(),
+    );
+
+    return NextResponse.json(upcoming);
+  } catch (error) {
     console.error("API Team Error:", error);
     return NextResponse.json({ error: "Greška na serveru" }, { status: 500 });
   }
@@ -62,18 +65,15 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Niste ulogovani" }, { status: 401 });
     }
 
-    // Verifikacija tokena i izvlačenje podataka
     const user = verifyAuthToken(token);
 
-    // PROVERA ROLE
-    // Pošto je u tvom fajlu role string, proveravamo direktno
     const isAdmin = user.role === "ADMIN";
     const isOrganizer = user.role === "ORGANIZER";
 
     if (!isAdmin && !isOrganizer) {
       return NextResponse.json(
-        { error: "Nemate dozvolu (Samo Admin ili Organizator)" }, 
-        { status: 403 }
+        { error: "Nemate dozvolu (Samo Admin ili Organizator)" },
+        { status: 403 },
       );
     }
 

@@ -3,6 +3,7 @@
 import Button from "../Button";
 import ButtonLink from "../Button";
 import { useEffect, useState } from "react";
+import { useAuth } from "../AuthProvider";
 
 type EventItem = {
   id: string | number;
@@ -35,6 +36,8 @@ export default function EventSection() {
       mounted = false;
     };
   }, []);
+
+  const { user } = useAuth();
 
   const formatDate = (value: string) => {
     const d = new Date(value);
@@ -91,6 +94,29 @@ export default function EventSection() {
       "DEC",
     ];
     return months[d.getMonth()];
+  };
+  const handleDelete = async (id: string | number) => {
+    const confirmDelete = confirm(
+      "Da li ste sigurni da želite da obrišete događaj?",
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/events?id=${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Greška pri brisanju");
+      }
+
+      // ukloni događaj iz state-a
+      setEvents((prev) => prev.filter((e) => e.id !== id));
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   if (loading) {
@@ -197,6 +223,15 @@ export default function EventSection() {
                   </div>
 
                   <Button href={`/events/${event.id}`} label="Prijavi se →" />
+                  {user?.role === "ADMIN" || user?.role === "ORGANIZER" ? (
+                    <div className="mt-4">
+                      <Button
+                        onClick={() => handleDelete(event.id)}
+                        label="Obriši događaj"
+                        variant="danger" // ako imaš
+                      />
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className="h-1 bg-linear-to-r from-transparent via-pub-orange to-transparent"></div>
