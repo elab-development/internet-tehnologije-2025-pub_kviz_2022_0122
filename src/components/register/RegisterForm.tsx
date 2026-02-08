@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Button from "../Button";
 import { getRegisterFields } from "@/constants/formFields";
 
@@ -11,13 +10,11 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const fields = getRegisterFields(
     { name, email, password },
     { setName, setEmail, setPassword },
   );
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -36,8 +33,7 @@ export default function RegisterForm() {
         setLoading(false);
         return;
       }
-
-      router.push("/");
+      window.location.href = "/";
     } catch (err) {
       setError("Došlo je do greške");
       setLoading(false);
