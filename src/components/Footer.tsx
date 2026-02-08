@@ -5,7 +5,7 @@ import Logo from "./Logo";
 export default function Footer() {
   return (
     <footer
-      className="bg-pub-gray text-black"
+      className="bg-pub-gray text-black z-10 relative bottom-0"
       style={{
         backgroundImage:
           "radial-gradient(circle at center, rgba(255,255,255,0.85) 0%, transparent 65%)",
