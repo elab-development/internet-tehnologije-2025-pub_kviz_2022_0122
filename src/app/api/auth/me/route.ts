@@ -24,6 +24,7 @@ export async function GET() {
         email: users.email,
         role: users.role,
         createdAt: users.createdAt,
+        teamId: users.teamId,
       })
       .from(users)
       .where(eq(users.id, parseInt(claims.sub, 10)));
