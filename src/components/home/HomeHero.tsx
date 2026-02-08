@@ -1,4 +1,4 @@
-import TeamSection from "./TeamSection";
+import { TeamSection }  from "./TeamSection";
 
 export default function HomeHero() {
   return (
@@ -23,7 +23,7 @@ export default function HomeHero() {
           <h2 className="mt-4 text-xl md:text-2xl font-medium text-center px-4">
             Testirajte svoje znanje i zabavite se sa prijateljima!
           </h2>
-          <TeamSection team={null} />
+          <TeamSection />
         </div>
       </div>
     </div>
