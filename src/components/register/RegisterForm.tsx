@@ -33,7 +33,7 @@ export default function RegisterForm() {
         setLoading(false);
         return;
       }
-      window.location.href = "/";
+      window.location.href = "/login";
     } catch (err) {
       setError("Došlo je do greške");
       setLoading(false);

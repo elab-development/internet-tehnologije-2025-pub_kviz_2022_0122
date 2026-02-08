@@ -228,7 +228,6 @@ export default function EventSection() {
                       <Button
                         onClick={() => handleDelete(event.id)}
                         label="Obriši događaj"
-                        variant="danger" // ako imaš
                       />
                     </div>
                   ) : null}
