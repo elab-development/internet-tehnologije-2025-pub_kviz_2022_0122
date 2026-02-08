@@ -8,8 +8,6 @@ export default function LogoutButton() {
 
   if (status !== "authenticated") return null;
 
-  console.log("User in LogoutButton", user);
-
   return (
     <div className="w-full h-screen flex items-center justify-center bg-pub-blue">
       {" "}

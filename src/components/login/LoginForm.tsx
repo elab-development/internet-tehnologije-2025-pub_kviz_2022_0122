@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import Button from "./Button";
+import Button from "../Button";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -69,7 +68,7 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full border-2 border-pub-orange bg-pub-beige px-4 py-3 text-black placeholder-pub-gray focus:border-pub-blue focus:outline-none focus:ring-2 focus:ring-pub-blue transition"
-              placeholder="Enter your email"
+              placeholder="Unesite vaš email"
             />
           </div>
           <div className="w-full">
@@ -77,7 +76,7 @@ export default function LoginForm() {
               htmlFor="password"
               className="block text-sm font-medium text-black mb-2"
             >
-              Password
+              Lozinka
             </label>
             <input
               id="password"
@@ -86,7 +85,7 @@ export default function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border-2 border-pub-orange bg-pub-beige px-4 py-3 text-black placeholder-pub-gray focus:border-pub-blue focus:outline-none focus:ring-2 focus:ring-pub-blue transition"
-              placeholder="Enter your password"
+              placeholder="Unesite vašu lozinku"
             />
           </div>
           {error && (
@@ -96,10 +95,19 @@ export default function LoginForm() {
           )}
           <Button
             onClick={handleSubmit}
-            label={loading ? "Logging in..." : "Login"}
+            label={loading ? "Prijavljivanje..." : "Prijavi se"}
             type="submit"
           />
         </form>
+        <p className="text-center mt-4 text-black">
+          Nemate nalog?{" "}
+          <a
+            href="/register"
+            className="text-pub-orange hover:underline font-semibold"
+          >
+            Registruj se
+          </a>
+        </p>
       </div>
     </div>
   );
