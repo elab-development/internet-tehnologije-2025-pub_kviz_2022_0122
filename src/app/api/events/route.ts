@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { db } from "@/db";
 import { events } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { eq } from "drizzle-orm";
 
 type EventItem = {
   id: string;
@@ -50,5 +50,49 @@ export async function GET(req: NextRequest) {
   }catch (error) {
     console.error("API Team Error:", error);
     return NextResponse.json({ error: "Greška na serveru" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(AUTH_COOKIE)?.value;
+
+    if (!token) {
+      return NextResponse.json({ error: "Niste ulogovani" }, { status: 401 });
+    }
+
+    // Verifikacija tokena i izvlačenje podataka
+    const user = verifyAuthToken(token);
+
+    // PROVERA ROLE
+    // Pošto je u tvom fajlu role string, proveravamo direktno
+    const isAdmin = user.role === "ADMIN";
+    const isOrganizer = user.role === "ORGANIZER";
+
+    if (!isAdmin && !isOrganizer) {
+      return NextResponse.json(
+        { error: "Nemate dozvolu (Samo Admin ili Organizator)" }, 
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const idParam = searchParams.get("id");
+
+    if (!idParam) {
+      return NextResponse.json({ error: "Nedostaje id" }, { status: 400 });
+    }
+
+    const idNumber = Number(idParam);
+    if (Number.isNaN(idNumber)) {
+      return NextResponse.json({ error: "Neispravan id" }, { status: 400 });
+    }
+
+    await db.delete(events).where(eq(events.id, idNumber));
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: "Sesija nevalidna" }, { status: 401 });
   }
 }
