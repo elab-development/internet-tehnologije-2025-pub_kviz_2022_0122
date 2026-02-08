@@ -1,5 +1,5 @@
-import Events from "@/components/events/Events";
+import EventSection from "@/components/home/EventSection";
 
 export default function EventsPage() {
-    return <Events />
+  return <EventSection />;
 }

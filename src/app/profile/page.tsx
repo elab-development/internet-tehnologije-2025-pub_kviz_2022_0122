@@ -6,7 +6,17 @@ import Button from "@/components/Button";
 export default function LogoutButton() {
   const { logout, status, user } = useAuth();
 
-  if (status !== "authenticated") return null;
+  console.log(user);
+
+  if (status === "loading") {
+    return (
+      <div className="h-screen text-white flex items-center justify-center">
+        Učitavanje...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") window.location.href = "/login";
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-pub-blue">

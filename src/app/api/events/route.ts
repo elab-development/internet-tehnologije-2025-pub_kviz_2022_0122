@@ -10,19 +10,19 @@ type EventItem = {
 };
 
 function isAuthorized(req: NextRequest): boolean {
-//   const authHeader = req.headers.get("authorization");
-//   if (!authHeader) return false;
+  //   const authHeader = req.headers.get("authorization");
+  //   if (!authHeader) return false;
 
-//   const [type, token] = authHeader.split(" ");
-//   if (type !== "Bearer" || !token) return false;
+  //   const [type, token] = authHeader.split(" ");
+  //   if (type !== "Bearer" || !token) return false;
 
-//   try {
-//     jwt.verify(token, process.env.JWT_SECRET!);
-//     return true;
-//   } catch {
-//     return false;
-//   }
-return true;
+  //   try {
+  //     jwt.verify(token, process.env.JWT_SECRET!);
+  //     return true;
+  //   } catch {
+  //     return false;
+  //   }
+  return true;
 }
 
 async function getAllEvents(): Promise<EventItem[]> {
@@ -33,6 +33,7 @@ async function getAllEvents(): Promise<EventItem[]> {
     name: e.name,
     date: e.eventDate.toISOString(),
     location: e.location,
+    capacity: e.capacity,
   }));
 }
 
@@ -45,7 +46,7 @@ export async function GET(req: NextRequest) {
   const now = new Date();
 
   const upcoming = all.filter(
-    (e) => new Date(e.date).getTime() >= now.getTime()
+    (e) => new Date(e.date).getTime() >= now.getTime(),
   );
 
   return NextResponse.json(upcoming);
