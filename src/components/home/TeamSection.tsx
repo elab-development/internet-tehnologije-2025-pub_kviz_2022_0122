@@ -2,6 +2,8 @@
 
 import Button from "../Button";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 type TeamResponse = {
   userId: string | number;
   team: {
@@ -14,6 +16,7 @@ export const TeamSection: React.FC = () => {
   const [teamData, setTeamData] = useState<TeamResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -57,7 +60,12 @@ export const TeamSection: React.FC = () => {
             <p className="text-xl font-medium">Vaš tim: {teamData.team.name}</p>
           </div>
 
-          <Button href="/team" label="Moj tim" />
+          <Button
+            onClick={() => {
+              router.push("/team");
+            }}
+            label="Moj tim"
+          />
         </div>
       ) : (
         <div className="flex flex-col items-center justify-between">
@@ -65,7 +73,12 @@ export const TeamSection: React.FC = () => {
             Još nisi deo nijednog tima. Pridruži se sada i počni da učestvuješ u
             kvizovima sa prijateljima!
           </p>
-          <Button href="/team" label="Pridruži se timu" />
+          <Button
+            onClick={() => {
+              router.push("/team");
+            }}
+            label="Pridruži se timu"
+          />
         </div>
       )}
     </div>

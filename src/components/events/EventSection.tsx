@@ -4,6 +4,7 @@ import Button from "../Button";
 import ButtonLink from "../Button";
 import { useEffect, useState } from "react";
 import { useAuth } from "../AuthProvider";
+import { usePathname, useRouter } from "next/navigation";
 
 type EventItem = {
   id: string | number;
@@ -18,6 +19,8 @@ export default function EventSection() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     let mounted = true;
@@ -112,7 +115,6 @@ export default function EventSection() {
         throw new Error(data.error || "Greška pri brisanju");
       }
 
-      // ukloni događaj iz state-a
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch (err: any) {
       alert(err.message);
@@ -239,9 +241,12 @@ export default function EventSection() {
           </div>
         )}
 
-        {events.length > 0 && (
+        {events.length > 0 && pathname !== "/events" && (
           <div className="text-center mt-12">
-            <ButtonLink href="/events" label="Pogledaj sve događaje" />
+            <ButtonLink
+              onClick={() => router.push("/events")}
+              label="Svi događaji"
+            />
           </div>
         )}
       </div>
