@@ -1,15 +1,6 @@
 "use client";
-
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
+import React, {createContext,  useContext,  useState,  useMemo,  useCallback,  useEffect,} from "react";
 import { useRouter } from "next/navigation";
-
 export type User = {
   id: string;
   name: string;
@@ -17,7 +8,6 @@ export type User = {
   role: string;
   createdAt: string;
 };
-
 type AuthState =
   | { status: "loading"; user: null }
   | { status: "unauthenticated"; user: null }
@@ -36,7 +26,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     status: "loading",
     user: null,
   });
-
   const refresh = useCallback(async () => {
     try {
       const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -50,7 +39,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setState({ status: "unauthenticated", user: null });
     }
   }, []);
-
   const logout = async () => {
     const res = await fetch("/api/auth/logout", {
       method: "POST",
@@ -59,11 +47,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState({ status: "unauthenticated", user: null });
     router.refresh();
   };
-
   useEffect(() => {
     refresh();
   }, [refresh]);
-
   const value = useMemo<Ctx>(
     () => ({ ...state, refresh, logout }),
     [state, refresh, logout],

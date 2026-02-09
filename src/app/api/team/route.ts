@@ -7,6 +7,23 @@ import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {
   try {
+    const cookieStore = await cookies();
+        const token = cookieStore.get(AUTH_COOKIE)?.value;
+    
+        if (!token) {
+          return NextResponse.json({ error: "Niste ulogovani" }, { status: 401 });
+        }
+    
+        let claims;
+        try {
+          claims = verifyAuthToken(token);
+        } catch (err) {
+          return NextResponse.json(
+            { error: "Token je istekao ili je nevalidan" },
+            { status: 401 },
+          );
+        }
+
     const { searchParams } = new URL(req.url);
     const requestedUserId = searchParams.get("id"); 
 

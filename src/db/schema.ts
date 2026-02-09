@@ -1,9 +1,7 @@
 import { pgTable, serial, varchar, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
-// ENUMI
 export const userRoleEnum = pgEnum("user_role", ["PLAYER", "ORGANIZER", "ADMIN"]);
 
-// TABELE
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
@@ -25,7 +23,7 @@ export const teams = pgTable("teams", {
   name: varchar("name", { length: 100 }).notNull(),
   captainId: integer("captain_id")
     .notNull()
-    .references(() => users.id), // Dodavanje spoljnog ključa
+    .references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -38,7 +36,6 @@ export const seasons = pgTable("seasons", {
   isActive: boolean("is_active").default(true).notNull(),
 });
 
-// ... (ostavi kod iz prethodnih koraka) ...
 import { numeric, primaryKey } from "drizzle-orm/pg-core";
 
 export const joinRequestStatusEnum = pgEnum("join_request_status", ["NA_CEKANJU", "ODBIJEN", "PRIHVACEN"]);
@@ -47,7 +44,7 @@ export const teamMembers = pgTable("team_members", {
     teamId: integer("team_id").notNull().references(() => teams.id),
     userId: integer("user_id").notNull().references(() => users.id),
   }, (t) => ({
-    pk: primaryKey({ columns: [t.teamId, t.userId] }), // Složeni primarni ključ
+    pk: primaryKey({ columns: [t.teamId, t.userId] }),
   })
 );
 
