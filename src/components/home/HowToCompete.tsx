@@ -2,8 +2,12 @@
 
 import Button from "@/components/Button";
 import { steps } from "@/constants/competeSteps";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function HowItWorks() {
+  const { status } = useAuth();
+  const router = useRouter();
   return (
     <section className="py-20 bg-transparent text-white z-10 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -68,7 +72,21 @@ export default function HowItWorks() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button href="/register" label="Registruj se besplatno →" />
+            {status === "authenticated" ? (
+              <Button
+                onClick={() => {
+                  router.push("/team");
+                }}
+                label="Pronađi tim →"
+              />
+            ) : (
+              <Button
+                onClick={() => {
+                  router.push("/register");
+                }}
+                label="Registruj se →"
+              />
+            )}
           </div>
         </div>
 

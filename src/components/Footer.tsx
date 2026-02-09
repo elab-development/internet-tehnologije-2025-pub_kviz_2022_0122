@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="mb-10 flex justify-center items-center gap-3">
           <Link href="/" className="text-2xl font-bold">
-            <Logo width={75} height={75} src="/pubquiz-logo.png" />
+            <Logo width={75} height={75} src="/logos/pubquiz-logo.png" />
           </Link>
         </div>
 

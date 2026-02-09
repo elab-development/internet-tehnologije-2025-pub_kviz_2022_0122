@@ -1,6 +1,5 @@
 import * as jwt from "jsonwebtoken";
 
-// src/lib/auth.ts
 export const AUTH_COOKIE = "auth";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -17,7 +16,8 @@ export function signAuthToken(claims: JwtUserClaims) {
   return jwt.sign(claims, JWT_SECRET, { algorithm: "HS256", expiresIn: "7d" });
 }
 export function verifyAuthToken(token: string): JwtUserClaims {
-  const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload & JwtUserClaims;
+  const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload &
+    JwtUserClaims;
 
   if (!payload || !payload.sub || !payload.email || !payload.role) {
     throw new Error("Invalid token: Missing required claims");
@@ -38,5 +38,3 @@ export function cookieOpts() {
     maxAge: 60 * 60 * 24 * 7,
   };
 }
-
-

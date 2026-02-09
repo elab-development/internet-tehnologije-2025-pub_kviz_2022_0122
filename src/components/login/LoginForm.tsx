@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import Button from "../Button";
+import { useAuth } from "../AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { status, logout } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +32,45 @@ export default function LoginForm() {
         return;
       }
 
-      window.location.href = "/";
+      router.push("/");
     } catch (err) {
       setError("Something went wrong");
       setLoading(false);
     }
   };
+
+  if (status === "authenticated") {
+    return (
+      <div className="relative h-screen flex items-center justify-center">
+        <img
+          src="/images/login/pub-login.jpg"
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover -z-10"
+        />
+        <div className="fixed inset-0 bg-black/40 -z-10 backdrop-blur-sm"></div>
+
+        <div className="bg-white border-2 border-pub-orange p-8 max-w-md w-full text-center space-y-6">
+          <h2 className="text-2xl font-bold text-black">Već ste prijavljeni</h2>
+
+          <p className="text-black/80">
+            Želite li da nastavite ili da se odjavite?
+          </p>
+
+          <div className="flex flex-col gap-4 items-center">
+            <Button label="Idi na početnu" onClick={() => router.push("/")} />
+
+            <Button
+              label="Izloguj se"
+              onClick={async () => {
+                await logout();
+                router.refresh();
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen flex items-center justify-center">

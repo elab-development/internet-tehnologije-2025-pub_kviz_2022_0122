@@ -17,10 +17,8 @@ export default function LogoutButton() {
     );
   }
 
-  if (status === "unauthenticated") window.location.href = "/login";
-
   return (
-    <div className="w-full h-screen flex space-x-10 items-center justify-center bg-pub-blue">
+    <div className="w-full h-screen flex space-x-10 items-center justify-center">
       <InfoCard
         title={user?.name || "Korisnik"}
         fields={[{ label: "Email", value: user?.email }]}

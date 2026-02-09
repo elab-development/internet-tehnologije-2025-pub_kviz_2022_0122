@@ -1,4 +1,4 @@
-import EventSection from "@/components/home/EventSection";
+import EventSection from "@/components/events/EventSection";
 import HomeHero from "@/components/home/HomeHero";
 import HowItWorksSection from "@/components/home/HowToCompete";
 

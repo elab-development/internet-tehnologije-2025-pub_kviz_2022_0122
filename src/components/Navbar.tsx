@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { menuItems } from "../constants/menuItems";
 import Logo from "./Logo";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const router = useRouter();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -18,7 +19,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-full">
           <div className="shrink-0 mr-12">
             <Link href="/" className="text-2xl font-bold">
-              <Logo width={75} height={75} src="/logo-beli-pubquiz.png" />
+              <Logo width={75} height={75} src="/logos/logo-beli-pubquiz.png" />
             </Link>
           </div>
           <ul className="hidden md:flex space-x-15 text-md">
@@ -56,16 +57,19 @@ export default function Navbar() {
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden bg-transparent">
+        <div className="md:hidden bg-white/70 backdrop-blur-sm border-t border-pub-blue/50">
           <ul className="px-2 pt-2 pb-3 space-y-1 text-lg">
             {menuItems.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block px-3 py-2 border-gray-700 border-b-2  hover:bg-slate-600"
+                <button
+                  onClick={() => {
+                    router.push(item.href);
+                    setIsOpen(false);
+                  }}
+                  className="block px-3 py-2 text-pub-blue font-semibold w-full text-left cursor-pointer border-pub-blue border-b  hover:bg-pub-blue/20 rounded transition-all duration-1000"
                 >
                   {item.label}
-                </Link>
+                </button>
               </li>
             ))}
           </ul>
