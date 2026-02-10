@@ -9,16 +9,15 @@ import {
   events,
   eventRegistrations,
   eventResults,
-} from "./schema";
-import { db } from "./index";
+} from "@/db/schema";
+import { db } from "@/db/index";
 import bcrypt from "bcrypt";
 
 const hash = await bcrypt.hash("admin", 10);
 
 await db.transaction(async (tx) => {
-  // Delete all data in reverse order of dependencies
   console.log("🗑️  Deleting existing data...");
-  
+
   await tx.delete(eventResults);
   await tx.delete(eventRegistrations);
   await tx.delete(events);
@@ -28,10 +27,9 @@ await db.transaction(async (tx) => {
   await tx.delete(teamMembers);
   await tx.delete(teams);
   await tx.delete(users);
-  
+
   console.log("✅ All existing data deleted!");
 
-  // 1. Seed Users
   const insertedUsers = await tx
     .insert(users)
     .values([
@@ -88,66 +86,59 @@ await db.transaction(async (tx) => {
 
   console.log("✅ Users seeded successfully!");
 
-  // 2. Seed Teams (captains are players)
   const insertedTeams = await tx
     .insert(teams)
     .values([
       {
         name: "The Quiz Masters",
-        captainId: insertedUsers[2].id, // Alice
+        captainId: insertedUsers[2].id,
       },
       {
         name: "Brain Busters",
-        captainId: insertedUsers[3].id, // Bob
+        captainId: insertedUsers[3].id,
       },
       {
         name: "Trivia Titans",
-        captainId: insertedUsers[4].id, // Carol
+        captainId: insertedUsers[4].id,
       },
     ])
     .returning();
 
   console.log("✅ Teams seeded successfully!");
 
-  // 3. Seed Team Members
   await tx.insert(teamMembers).values([
-    // Team 1: Alice (captain), Bob, Carol
     { teamId: insertedTeams[0].id, userId: insertedUsers[2].id },
     { teamId: insertedTeams[0].id, userId: insertedUsers[3].id },
     { teamId: insertedTeams[0].id, userId: insertedUsers[4].id },
-    // Team 2: Bob (captain), David, Eve
     { teamId: insertedTeams[1].id, userId: insertedUsers[3].id },
     { teamId: insertedTeams[1].id, userId: insertedUsers[5].id },
     { teamId: insertedTeams[1].id, userId: insertedUsers[6].id },
-    // Team 3: Carol (captain), Frank
     { teamId: insertedTeams[2].id, userId: insertedUsers[4].id },
     { teamId: insertedTeams[2].id, userId: insertedUsers[7].id },
   ]);
 
   console.log("✅ Team Members seeded successfully!");
 
-  // 4. Seed Team Join Requests
   await tx.insert(teamJoinRequests).values([
     {
       teamId: insertedTeams[0].id,
-      userId: insertedUsers[5].id, // David requesting to join Team 1
+      userId: insertedUsers[5].id,
       status: "NA_CEKANJU",
     },
     {
       teamId: insertedTeams[1].id,
-      userId: insertedUsers[7].id, // Frank requesting to join Team 2
+      userId: insertedUsers[7].id,
       status: "PRIHVACEN",
     },
     {
       teamId: insertedTeams[2].id,
-      userId: insertedUsers[6].id, // Eve requesting to join Team 3
+      userId: insertedUsers[6].id,
       status: "ODBIJEN",
     },
   ]);
 
   console.log("✅ Team Join Requests seeded successfully!");
 
-  // 5. Seed Leagues
   const insertedLeagues = await tx
     .insert(leagues)
     .values([
@@ -159,7 +150,6 @@ await db.transaction(async (tx) => {
 
   console.log("✅ Leagues seeded successfully!");
 
-  // 6. Seed Seasons
   const insertedSeasons = await tx
     .insert(seasons)
     .values([
@@ -188,7 +178,6 @@ await db.transaction(async (tx) => {
 
   console.log("✅ Seasons seeded successfully!");
 
-  // 7. Seed Events
   const insertedEvents = await tx
     .insert(events)
     .values([
@@ -277,7 +266,6 @@ await db.transaction(async (tx) => {
 
   console.log("✅ Events seeded successfully!");
 
-  // 8. Seed Event Registrations
   await tx.insert(eventRegistrations).values([
     {
       eventId: insertedEvents[0].id,
@@ -308,7 +296,6 @@ await db.transaction(async (tx) => {
 
   console.log("✅ Event Registrations seeded successfully!");
 
-  // 9. Seed Event Results
   await tx.insert(eventResults).values([
     {
       eventId: insertedEvents[0].id,

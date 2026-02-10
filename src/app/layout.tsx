@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
-import ConditionalLayout from "../components/ConditionalLayout";
+import "@/app/globals.css";
+import ConditionalLayout from "@/components/ConditionalLayout";
 import { AuthProvider } from "@/components/AuthProvider";
 
 const geistSans = Poppins({

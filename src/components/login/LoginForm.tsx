@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Button from "../Button";
-import { useAuth } from "../AuthProvider";
+import Button from "@/components/Button";
+import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {

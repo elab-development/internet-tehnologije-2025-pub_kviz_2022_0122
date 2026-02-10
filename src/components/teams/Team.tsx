@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import type { TeamResponse } from "@/constants/types";
-import TeamMembers from "./TeamMembers";
-import TeamAchievements from "./TeamAchievements";
-import AllTeams from "./AllTeams";
-import MyTeam from "./MyTeam";
+import TeamMembers from "@/components/teams/TeamMembers";
+import TeamAchievements from "@/components/teams/TeamAchievements";
+import AllTeams from "@/components/teams/AllTeams";
+import MyTeam from "@/components/teams/MyTeam";
 
 export const Team: React.FC = () => {
   const { user, status, refresh } = useAuth();

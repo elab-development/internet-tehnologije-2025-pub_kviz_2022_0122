@@ -7,17 +7,13 @@ interface TeamMembersProps {
   teamData: TeamResponse | null;
 }
 
-export default function TeamMembers({
-  teamData,
-  
-}: TeamMembersProps) {
+export default function TeamMembers({ teamData }: TeamMembersProps) {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const { user, status } = useAuth();
   useEffect(() => {
     const fetchTeamMembers = async () => {
       try {
-        console.log("Tim ID:", teamData?.id);
         const response = await fetch(`/api/members?id=${teamData?.id}`, {
           credentials: "include",
         });

@@ -1,4 +1,4 @@
-import { TeamSection } from "./TeamSection";
+import { TeamSection } from "@/components/home/TeamSection";
 
 export default function HomeHero() {
   return (

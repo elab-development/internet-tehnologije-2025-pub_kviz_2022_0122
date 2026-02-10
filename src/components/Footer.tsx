@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { menuItems } from "../constants/menuItems";
-import Logo from "./Logo";
+import { menuItems } from "@/constants/menuItems";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
   return (

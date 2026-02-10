@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { menuItems } from "../constants/menuItems";
-import Logo from "./Logo";
+import { menuItems } from "@/constants/menuItems";
+import Logo from "@/components/Logo";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {

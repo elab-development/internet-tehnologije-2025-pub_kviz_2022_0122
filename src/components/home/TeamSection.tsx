@@ -1,9 +1,9 @@
 "use client";
 
-import Button from "../Button";
+import Button from "@/components/Button";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../AuthProvider";
+import { useAuth } from "@/components/AuthProvider";
 import type { TeamResponse } from "@/constants/types";
 
 export const TeamSection: React.FC = () => {

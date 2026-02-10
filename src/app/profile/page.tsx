@@ -4,12 +4,9 @@ import { useAuth } from "@/components/AuthProvider";
 import Button from "@/components/Button";
 import InfoCard from "@/components/InfoCard";
 
-export default function LogoutButton() {
+export default function ProfilePage() {
   const { logout, status, user, refresh } = useAuth();
 
-  console.log(user);
-
-    
   if (status === "loading") {
     return (
       <div className="h-screen text-white flex items-center justify-center">
@@ -19,9 +16,9 @@ export default function LogoutButton() {
   }
 
   if (status === "unauthenticated" || !user) {
-      refresh();
-      return;
-    }
+    refresh();
+    return;
+  }
 
   return (
     <div className="w-full h-screen flex space-x-10 items-center justify-center">
