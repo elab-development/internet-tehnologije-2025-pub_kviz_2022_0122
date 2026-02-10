@@ -2,15 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Button from "../Button";
+import { useAuth } from "../AuthProvider";
 
 type TeamMember = {
-  id: string | number;
+  id: number;
   name: string;
-  avatar?: string;
-  score: number;
-  rank?: number;
+  email: string;
+  role: string;
 };
-
 type TeamStats = {
   totalQuizzes: number;
   wins: number;
@@ -19,62 +18,121 @@ type TeamStats = {
 };
 
 type TeamResponse = {
-  userId: string | number;
-  team: {
-    id: string | number;
+  id: number;
+  name: string;
+  createdAt: string;
+  captain: {
+    id: number;
     name: string;
-    description?: string;
-    members?: TeamMember[];
-    stats?: TeamStats;
-    captain?: string;
   };
 };
 
 export const MyTeam: React.FC = () => {
+  const { user, status, refresh } = useAuth();
   const [teamData, setTeamData] = useState<TeamResponse | null>(null);
+  const [allTeams, setAllTeams] = useState<TeamResponse[]>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
+  var timid: number | null = null;
 
   useEffect(() => {
+    
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !user) {
+      refresh();
+      return;
+    }
     const fetchTeamData = async () => {
       try {
-        const response = await fetch("/api/team", {
+        const response = await fetch(`/api/team?id=${user?.id}`, {
           credentials: "include",
         });
         const data = await response.json();
-        if (!response.ok)
-          throw new Error(data?.error || "Failed to fetch team data");
-        setTeamData(data);
+        if (response.ok) {
+          setTeamData(data);
+          timid = data.id;
+          console.log("Tim ID:", timid);
+        }
       } catch (err) {
-        console.error("An error occurred:", err);
+        console.error("Greška pri dohvatanju tima:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTeamData();
-  }, []);
+    const fetchTeamMembers = async () => {
+      try {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        console.log("Tim ID:", timid);
+        const response = await fetch(`/api/members?id=${timid}`, {
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setTeamMembers(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error("Greška pri dohvatanju clanova:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (loading) {
+    const fetchAllTeams = async () => {
+      try {
+        const response = await fetch("/api/team", {
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setAllTeams(Array.isArray(data) ? data : []);
+        } else {
+          console.error("Greška pri dohvatanju svih timova:", data);
+          setAllTeams([]);
+        }
+      } catch (err) {
+        console.error("Greška pri dohvatanju svih timova:", err);
+        setAllTeams([]);
+      }
+    };
+
+    fetchTeamData();
+    fetchTeamMembers();
+    fetchAllTeams();
+  }, [user?.id, status]);
+
+  if (status === "loading" || (loading && status === "authenticated")) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-xl">Učitavanje...</div>
+        <div className="animate-pulse text-xl font-bold text-pub-orange">
+          Učitavanje profila i tima...
+        </div>
       </div>
     );
   }
 
-  const allTeams = [
-    { id: 1, name: "Tim A", memberCount: 5, wins: 12, avgScore: 850 },
-    { id: 2, name: "Tim B", memberCount: 3, wins: 8, avgScore: 720 },
-    { id: 3, name: "Tim C", memberCount: 8, wins: 15, avgScore: 920 },
-  ];
+  const getMonth = (value: string) => {
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    const months = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAJ",
+      "JUN",
+      "JUL",
+      "AVG",
+      "SEP",
+      "OKT",
+      "NOV",
+      "DEC",
+    ];
+    return months[d.getMonth()];
+  };
+  
 
-  const mockMembers: TeamMember[] = [
-    { id: 1, name: "Marko P.", score: 1250, rank: 1 },
-    { id: 2, name: "Ana S.", score: 1100, rank: 2 },
-    { id: 3, name: "Stefan M.", score: 980, rank: 3 },
-    { id: 4, name: "Jelena K.", score: 850, rank: 4 },
-    { id: 5, name: "Nikola D.", score: 720, rank: 5 },
-  ];
 
   const mockStats: TeamStats = {
     totalQuizzes: 24,
@@ -91,7 +149,7 @@ export const MyTeam: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-pub-orange opacity-10 rounded-full -ml-24 -mb-24"></div>
 
           <div className="relative z-10">
-            {teamData?.team ? (
+            {teamData?.id ? (
               <div className="text-center md:text-left">
                 <div className="inline-block px-4 py-1 bg-pub-orange/20 rounded-full mb-4">
                   <span className="text-pub-orange font-semibold text-sm">
@@ -99,36 +157,30 @@ export const MyTeam: React.FC = () => {
                   </span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-3 text-black">
-                  {teamData.team.name}
+                  {teamData.name}
                 </h1>
                 <p className="text-lg text-gray-700 mb-6">
-                  {teamData.team.description || "Spremni za sledeći kviz!"}
+                  Spremni za sledeći kviz!
                 </p>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                   <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
                     <div className="text-3xl font-bold text-pub-orange">
-                      {mockStats.wins}
+                      {teamData.captain?.name}
                     </div>
-                    <div className="text-sm text-gray-600">Pobede</div>
+                    <div className="text-sm text-gray-600">Kapiten</div>
                   </div>
                   <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
                     <div className="text-3xl font-bold text-pub-orange">
-                      {mockStats.totalQuizzes}
+                      {getMonth(teamData.createdAt)} {new Date(teamData.createdAt).getFullYear()}
                     </div>
-                    <div className="text-sm text-gray-600">Kvizovi</div>
+                    <div className="text-sm text-gray-600">Tim kreiran</div>
                   </div>
                   <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
                     <div className="text-3xl font-bold text-pub-orange">
-                      {mockMembers.length}
+                      {teamMembers.length}
                     </div>
                     <div className="text-sm text-gray-600">Članovi</div>
-                  </div>
-                  <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
-                    <div className="text-3xl font-bold text-pub-orange">
-                      {mockStats.averageScore}
-                    </div>
-                    <div className="text-sm text-gray-600">Prosek</div>
                   </div>
                 </div>
               </div>
@@ -146,19 +198,19 @@ export const MyTeam: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {teamData?.team && (
+          {teamData?.id && (
             <div className="lg:col-span-2 border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-black flex items-center gap-2">
                   Članovi tima
                 </h2>
                 <span className="text-sm text-gray-500">
-                  {mockMembers.length} ukupno
+                  {teamMembers.length} ukupno
                 </span>
               </div>
 
               <div className="space-y-3">
-                {mockMembers.map((member, index) => (
+                {teamMembers.map((member) => (
                   <div
                     key={member.id}
                     className="flex items-center justify-between p-4 bg-linear-to-r from-orange-50 to-white border border-pub-orange/20 rounded-xl hover:shadow-md transition-all"
@@ -170,21 +222,17 @@ export const MyTeam: React.FC = () => {
                       <div>
                         <div className="font-semibold text-black flex items-center gap-2">
                           {member.name}
-                          {index === 0 && (
+                          {/* {index === 0 && (
                             <span className="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
                               Kapiten
                             </span>
-                          )}
+                          )} */}
                         </div>
-                        <div className="text-sm text-gray-600">
-                          Rang #{member.rank}
-                        </div>
+                        
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-pub-orange text-lg">
-                        {member.score}
-                      </div>
+                      
                       <div className="text-xs text-gray-500">poena</div>
                     </div>
                   </div>
@@ -193,7 +241,7 @@ export const MyTeam: React.FC = () => {
             </div>
           )}
 
-          {teamData?.team && (
+          {teamData?.id && (
             <div className="border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
               <h2 className="text-2xl font-bold mb-6 text-black flex items-center gap-2">
                 Dostignuća
@@ -249,7 +297,7 @@ export const MyTeam: React.FC = () => {
 
           <div className="lg:col-span-3 border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
             <h2 className="text-2xl font-bold mb-6 text-black">
-              {teamData?.team ? "Drugi timovi" : "Dostupni timovi"}
+              {teamData?.id ? "Drugi timovi" : "Dostupni timovi"}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -264,10 +312,10 @@ export const MyTeam: React.FC = () => {
                         {team.name}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        {team.memberCount} članova
+                        {} članova
                       </p>
                     </div>
-                    <div className="w-12 h-12 bg-pub-orange/20 rounded-full flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 bg-pub-orange/20 rounded-full flex items-center justify-center text-2xl text-pub-gray">
                       {team.name.charAt(0)}
                     </div>
                   </div>
@@ -275,26 +323,26 @@ export const MyTeam: React.FC = () => {
                   <div className="flex gap-4 mb-4 text-sm">
                     <div>
                       <div className="font-semibold text-pub-orange">
-                        {team.wins}
+                        {}
                       </div>
                       <div className="text-gray-500">pobeda</div>
                     </div>
                     <div>
                       <div className="font-semibold text-pub-orange">
-                        {team.avgScore}
+                        {}
                       </div>
                       <div className="text-gray-500">prosek</div>
                     </div>
                   </div>
 
-                  {!teamData?.team && (
+                  {!teamData?.id && (
                     <Button
                       onClick={() => console.log("Zahtev za:", team.id)}
                       label="Pošalji zahtev"
                     />
                   )}
 
-                  {teamData?.team && (
+                  {teamData?.id && (
                     <Button
                       onClick={() => console.log("Pogledaj:", team.id)}
                       label="Pogledaj tim"

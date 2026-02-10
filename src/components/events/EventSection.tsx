@@ -42,29 +42,6 @@ export default function EventSection() {
 
   const { user } = useAuth();
 
-  const formatDate = (value: string) => {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return "";
-    const yyyy = d.getFullYear();
-    const months = [
-      "Januar",
-      "Februar",
-      "Mart",
-      "April",
-      "Maj",
-      "Jun",
-      "Jul",
-      "Avgust",
-      "Septembar",
-      "Oktobar",
-      "Novembar",
-      "Decembar",
-    ];
-    const mmm = months[d.getMonth()];
-    const dd = String(d.getDate()).padStart(2, "0");
-    return `${dd} ${mmm} ${yyyy}`;
-  };
-
   const formatTime = (value: string) => {
     const d = new Date(value);
     if (Number.isNaN(d.getTime())) return "";
