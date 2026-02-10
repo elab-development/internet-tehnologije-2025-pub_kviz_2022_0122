@@ -3,47 +3,43 @@
 import Button from "../Button";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-type TeamResponse = {
-  userId: string | number;
-  team: {
-    id: string | number;
-    name: string;
-  };
-};
+import { useAuth } from "../AuthProvider";
+import type { TeamResponse } from "@/constants/types";
 
 export const TeamSection: React.FC = () => {
   const [teamData, setTeamData] = useState<TeamResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const { user, status, refresh } = useAuth();
 
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !user) {
+      refresh();
+      return;
+    }
     const fetchTeamData = async () => {
       try {
-        const response = await fetch("/api/team", {
+        const response = await fetch(`/api/team?id=${user?.id}`, {
           credentials: "include",
         });
         const data = await response.json();
-        if (!response.ok)
-          throw new Error(data?.error || "Failed to fetch team data");
-        setTeamData(data);
+        if (response.ok) {
+          setTeamData(data);
+        } else {
+          setError("Nije moguće dohvatiti podatke o timu.");
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
+        console.error("Greška pri dohvatanju tima:", err);
       } finally {
         setLoading(false);
       }
     };
-    console.log(
-      "MyTeam component - teamData:",
-      teamData,
-      "loading:",
-      loading,
-      "error:",
-      error,
-    );
+
     fetchTeamData();
-  }, []);
+  }, [user?.id, status]);
 
   return (
     <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-white/10 p-6 mt-8 w-full">
@@ -51,13 +47,13 @@ export const TeamSection: React.FC = () => {
         Želiš da učestvuješ u kvizu?
       </h2>
 
-      {teamData?.team ? (
+      {teamData ? (
         <div className="flex items-center justify-between">
           <div className="px-4">
             <p className="text-sm text-neutral-500">
               Pogledaj detalje o svom timu i prati kako napredujete u kvizovima.
             </p>
-            <p className="text-xl font-medium">Vaš tim: {teamData.team.name}</p>
+            <p className="text-xl font-medium">Vaš tim: {teamData?.name}</p>
           </div>
 
           <Button
