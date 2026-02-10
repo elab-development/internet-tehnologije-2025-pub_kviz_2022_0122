@@ -201,7 +201,10 @@ export default function EventSection() {
                     </div>
                   </div>
 
-                  <Button href={`/events/${event.id}`} label="Prijavi se →" />
+                  <Button
+                    onClick={() => router.push(`/events/${event.id}`)}
+                    label="Prijavi se →"
+                  />
                   {user?.role === "ADMIN" || user?.role === "ORGANIZER" ? (
                     <div className="mt-4">
                       <Button

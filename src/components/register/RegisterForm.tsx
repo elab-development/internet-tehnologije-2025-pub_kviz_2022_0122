@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import { getRegisterFields } from "@/constants/formFields";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fields = getRegisterFields(
     { name, email, password },
@@ -33,7 +35,7 @@ export default function RegisterForm() {
         setLoading(false);
         return;
       }
-      window.location.href = "/login";
+      router.push("/login");
     } catch (err) {
       setError("Došlo je do greške");
       setLoading(false);
