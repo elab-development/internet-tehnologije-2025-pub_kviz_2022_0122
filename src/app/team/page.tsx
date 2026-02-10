@@ -1,5 +1,5 @@
-import { MyTeam } from "@/components/teams/MyTeam";
+import { Team } from "@/components/teams/Team";
 
 export default function EventsPage() {
-    return <MyTeam />
+  return <Team />;
 }
