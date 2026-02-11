@@ -16,7 +16,7 @@ import bcrypt from "bcrypt";
 const hash = await bcrypt.hash("admin", 10);
 
 await db.transaction(async (tx) => {
-  console.log("🗑️  Deleting existing data...");
+  console.log("🗑️  Brisanje postojećih podataka...");
 
   await tx.delete(eventResults);
   await tx.delete(eventRegistrations);
@@ -28,7 +28,7 @@ await db.transaction(async (tx) => {
   await tx.delete(teams);
   await tx.delete(users);
 
-  console.log("✅ All existing data deleted!");
+  console.log("✅ Svi podaci su obrisani!");
 
   const insertedUsers = await tx
     .insert(users)
@@ -36,265 +36,163 @@ await db.transaction(async (tx) => {
       {
         email: "admin@example.com",
         passwordHash: hash,
-        name: "Admin User",
+        name: "Marko Administrator",
         role: "ADMIN",
       },
       {
-        email: "organizer@example.com",
+        email: "organizator@example.com",
         passwordHash: hash,
-        name: "John Organizer",
+        name: "Jelena Organizator",
         role: "ORGANIZER",
       },
       {
-        email: "player1@example.com",
+        email: "nikola@example.com",
         passwordHash: hash,
-        name: "Alice Player",
+        name: "Nikola Petrović",
         role: "PLAYER",
       },
       {
-        email: "player2@example.com",
+        email: "milica@example.com",
         passwordHash: hash,
-        name: "Bob Player",
+        name: "Milica Jovanović",
         role: "PLAYER",
       },
       {
-        email: "player3@example.com",
+        email: "stefan@example.com",
         passwordHash: hash,
-        name: "Carol Player",
+        name: "Stefan Đorđević",
         role: "PLAYER",
       },
       {
-        email: "player4@example.com",
+        email: "ana@example.com",
         passwordHash: hash,
-        name: "David Player",
+        name: "Ana Ilić",
         role: "PLAYER",
       },
       {
-        email: "player5@example.com",
+        email: "dušan@example.com",
         passwordHash: hash,
-        name: "Eve Player",
+        name: "Dušan Lukić",
         role: "PLAYER",
       },
       {
-        email: "player6@example.com",
+        email: "jovana@example.com",
         passwordHash: hash,
-        name: "Frank Player",
+        name: "Jovana Kostić",
         role: "PLAYER",
       },
     ])
     .returning();
 
-  console.log("✅ Users seeded successfully!");
+  console.log("✅ Korisnici su uspešno uneti!");
 
   const insertedTeams = await tx
     .insert(teams)
     .values([
       {
-        name: "The Quiz Masters",
+        name: "Beogradski Fantom",
         captainId: insertedUsers[2].id,
       },
       {
-        name: "Brain Busters",
-        captainId: insertedUsers[3].id,
+        name: "Zoki i ekipa",
+        captainId: insertedUsers[5].id,
       },
       {
-        name: "Trivia Titans",
-        captainId: insertedUsers[4].id,
+        name: "Maxbet premium partner evrolige",
+        captainId: insertedUsers[7].id,
       },
     ])
     .returning();
 
-  console.log("✅ Teams seeded successfully!");
+  console.log("✅ Timovi su uspešno uneti!");
 
   await tx.insert(teamMembers).values([
+
     { teamId: insertedTeams[0].id, userId: insertedUsers[2].id },
     { teamId: insertedTeams[0].id, userId: insertedUsers[3].id },
     { teamId: insertedTeams[0].id, userId: insertedUsers[4].id },
-    { teamId: insertedTeams[1].id, userId: insertedUsers[3].id },
+    
     { teamId: insertedTeams[1].id, userId: insertedUsers[5].id },
     { teamId: insertedTeams[1].id, userId: insertedUsers[6].id },
-    { teamId: insertedTeams[2].id, userId: insertedUsers[4].id },
+    
     { teamId: insertedTeams[2].id, userId: insertedUsers[7].id },
   ]);
 
-  console.log("✅ Team Members seeded successfully!");
-
-  await tx.insert(teamJoinRequests).values([
-    {
-      teamId: insertedTeams[0].id,
-      userId: insertedUsers[5].id,
-      status: "NA_CEKANJU",
-    },
-    {
-      teamId: insertedTeams[1].id,
-      userId: insertedUsers[7].id,
-      status: "PRIHVACEN",
-    },
-    {
-      teamId: insertedTeams[2].id,
-      userId: insertedUsers[6].id,
-      status: "ODBIJEN",
-    },
-  ]);
-
-  console.log("✅ Team Join Requests seeded successfully!");
+  console.log("✅ Članovi timova su uspešno uneti!");
 
   const insertedLeagues = await tx
     .insert(leagues)
     .values([
-      { name: "Premier Pub Quiz League" },
-      { name: "Championship Quiz League" },
-      { name: "Local Trivia League" },
+      { name: "Srpska Pab Kviz Liga" },
+      { name: "Studentska Kviz Liga" },
     ])
     .returning();
-
-  console.log("✅ Leagues seeded successfully!");
 
   const insertedSeasons = await tx
     .insert(seasons)
     .values([
       {
         leagueId: insertedLeagues[0].id,
-        name: "Spring 2024",
+        name: "Proleće 2026",
         isActive: true,
       },
       {
         leagueId: insertedLeagues[0].id,
-        name: "Fall 2023",
+        name: "Zima 2025",
         isActive: false,
-      },
-      {
-        leagueId: insertedLeagues[1].id,
-        name: "Winter 2024",
-        isActive: true,
-      },
-      {
-        leagueId: insertedLeagues[2].id,
-        name: "Spring 2026",
-        isActive: true,
       },
     ])
     .returning();
-
-  console.log("✅ Seasons seeded successfully!");
 
   const insertedEvents = await tx
     .insert(events)
     .values([
       {
-        seasonId: insertedSeasons[3].id,
-        name: "New Year Warm-up",
-        theme: "General Knowledge",
-        location: "The Crown Pub",
-        eventDate: new Date("2026-01-08T19:00:00"),
-        capacity: 50,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "Winter Wonders",
-        theme: "History & Culture",
-        location: "The Red Lion",
-        eventDate: new Date("2026-01-22T19:00:00"),
-        capacity: 45,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "February Flicks",
-        theme: "Movies",
-        location: "The Old Oak",
-        eventDate: new Date("2026-02-05T19:00:00"),
+        seasonId: insertedSeasons[0].id,
+        name: "Novogodišnje zagrevanje",
+        theme: "Opšte znanje",
+        location: "Kafana Druga kuća",
+        eventDate: new Date("2026-03-08T19:00:00"),
         capacity: 40,
       },
       {
-        seasonId: insertedSeasons[3].id,
-        name: "Valentine Trivia",
-        theme: "Pop Culture",
-        location: "The Green Dragon",
-        eventDate: new Date("2026-02-12T19:00:00"),
-        capacity: 40,
+        seasonId: insertedSeasons[0].id,
+        name: "Filmsko veče",
+        theme: "Domaća i strana kinematografija",
+        location: "Pub Lazino Tele",
+        eventDate: new Date("2026-03-22T20:00:00"),
+        capacity: 30,
       },
       {
-        seasonId: insertedSeasons[3].id,
-        name: "March Madness",
-        theme: "Sports & Games",
-        location: "The Kings Arms",
-        eventDate: new Date("2026-03-05T19:00:00"),
-        capacity: 55,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "Spring Opener",
-        theme: "General Knowledge",
-        location: "The Silver Fox",
-        eventDate: new Date("2026-03-19T19:00:00"),
+        seasonId: insertedSeasons[0].id,
+        name: "Sportski maraton",
+        theme: "Istorija sporta i Olimpijske igre",
+        location: "Sport Caffe",
+        eventDate: new Date("2026-04-05T19:30:00"),
         capacity: 50,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "April Antics",
-        theme: "Music",
-        location: "The Crown Pub",
-        eventDate: new Date("2026-04-02T19:00:00"),
-        capacity: 45,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "Easter Special",
-        theme: "Mixed Trivia",
-        location: "The Red Lion",
-        eventDate: new Date("2026-04-16T19:00:00"),
-        capacity: 50,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "Mayday Quiz",
-        theme: "Geography",
-        location: "The Old Oak",
-        eventDate: new Date("2026-05-07T19:00:00"),
-        capacity: 60,
-      },
-      {
-        seasonId: insertedSeasons[3].id,
-        name: "Spring Finale",
-        theme: "General Knowledge",
-        location: "The Green Dragon",
-        eventDate: new Date("2026-05-21T19:00:00"),
-        capacity: 60,
       },
     ])
     .returning();
 
-  console.log("✅ Events seeded successfully!");
+  console.log("✅ Događaji su uspešno uneti!");
 
   await tx.insert(eventRegistrations).values([
     {
       eventId: insertedEvents[0].id,
       teamId: insertedTeams[0].id,
-      price: "25.00",
+      price: "1500.00",
     },
     {
       eventId: insertedEvents[0].id,
       teamId: insertedTeams[1].id,
-      price: "25.00",
-    },
-    {
-      eventId: insertedEvents[1].id,
-      teamId: insertedTeams[0].id,
-      price: "30.00",
+      price: "1500.00",
     },
     {
       eventId: insertedEvents[1].id,
       teamId: insertedTeams[2].id,
-      price: "30.00",
-    },
-    {
-      eventId: insertedEvents[2].id,
-      teamId: insertedTeams[1].id,
-      price: "20.00",
+      price: "1200.00",
     },
   ]);
-
-  console.log("✅ Event Registrations seeded successfully!");
 
   await tx.insert(eventResults).values([
     {
@@ -307,20 +205,9 @@ await db.transaction(async (tx) => {
       teamId: insertedTeams[1].id,
       placement: 2,
     },
-    {
-      eventId: insertedEvents[1].id,
-      teamId: insertedTeams[0].id,
-      placement: 2,
-    },
-    {
-      eventId: insertedEvents[1].id,
-      teamId: insertedTeams[2].id,
-      placement: 1,
-    },
   ]);
 
-  console.log("✅ Event Results seeded successfully!");
-  console.log("🎉 All tables seeded successfully!");
+  console.log("🎉 Sve tabele su uspešno popunjene!");
 });
 
 process.exit(0);
