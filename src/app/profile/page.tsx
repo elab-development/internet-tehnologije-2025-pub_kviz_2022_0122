@@ -6,7 +6,6 @@ import InfoCard from "@/components/InfoCard";
 
 export default function ProfilePage() {
   const { logout, status, user, refresh } = useAuth();
-
   if (status === "loading") {
     return (
       <div className="h-screen text-white flex items-center justify-center">
@@ -16,7 +15,6 @@ export default function ProfilePage() {
   }
 
   if (status === "unauthenticated" || !user) {
-    refresh();
     return;
   }
 
