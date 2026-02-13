@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { teams, teamMembers, users } from "@/db/schema";
+import { teams, users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -25,9 +25,9 @@ export async function GET(req: NextRequest) {
         }
 
     const { searchParams } = new URL(req.url);
-    const requestedUserId = searchParams.get("id"); 
+    const requestedTeamId = searchParams.get("id"); 
 
-    if (!requestedUserId) {
+    if (!requestedTeamId) {
       const rows = await db
       .select({
         id: teams.id,
@@ -39,12 +39,12 @@ export async function GET(req: NextRequest) {
         },
       })
       .from(teams)
-      .leftJoin(users, eq(teams.captainId, users.id));
+      .innerJoin(users, eq(teams.id, users.teamId)).where(eq(users.captain, true));
 
     return NextResponse.json(rows);
     }
 
-    const userIdNumber = parseInt(requestedUserId, 10);
+    const teamIdNumber = parseInt(requestedTeamId, 10);
 
     const rows = await db
       .select({
@@ -56,10 +56,9 @@ export async function GET(req: NextRequest) {
           name: users.name,
         },
       })
-      .from(teamMembers)
-      .innerJoin(teams, eq(teamMembers.teamId, teams.id))
-      .innerJoin(users, eq(teams.captainId, users.id))
-      .where(eq(teamMembers.userId, userIdNumber));
+      .from(teams)
+      .innerJoin(users, eq(teams.id, users.teamId))
+      .where(and(eq(teams.id, teamIdNumber),eq(users.captain, true)));
 
     if (rows.length === 0) {
       return NextResponse.json({ error: "Korisnik nije član nijednog tima" }, { status: 404 });

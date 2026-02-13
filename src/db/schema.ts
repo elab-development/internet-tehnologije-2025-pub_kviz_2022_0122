@@ -5,6 +5,8 @@ import {
   text,
   timestamp,
   pgEnum,
+  integer,
+  boolean
 } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", [
@@ -13,6 +15,15 @@ export const userRoleEnum = pgEnum("user_role", [
   "ADMIN",
 ]);
 
+export const teams = pgTable("teams", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  leagueId: integer("league_id")
+    .notNull()
+    .references(() => leagues.id),
+});
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
@@ -20,22 +31,14 @@ export const users = pgTable("users", {
   name: varchar("name", { length: 100 }).notNull(),
   role: userRoleEnum("role").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  teamId: integer("team_id")
+    .references(() => teams.id),
+  captain: boolean("captain").notNull().default(false),
 });
 
 export const leagues = pgTable("leagues", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
-});
-
-import { integer, boolean } from "drizzle-orm/pg-core";
-
-export const teams = pgTable("teams", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 100 }).notNull(),
-  captainId: integer("captain_id")
-    .notNull()
-    .references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const seasons = pgTable("seasons", {
@@ -48,27 +51,6 @@ export const seasons = pgTable("seasons", {
 });
 
 import { numeric, primaryKey } from "drizzle-orm/pg-core";
-
-export const joinRequestStatusEnum = pgEnum("join_request_status", [
-  "NA_CEKANJU",
-  "ODBIJEN",
-  "PRIHVACEN",
-]);
-
-export const teamMembers = pgTable(
-  "team_members",
-  {
-    teamId: integer("team_id")
-      .notNull()
-      .references(() => teams.id),
-    userId: integer("user_id")
-      .notNull()
-      .references(() => users.id),
-  },
-  (t) => ({
-    pk: primaryKey({ columns: [t.teamId, t.userId] }),
-  }),
-);
 
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
@@ -117,6 +99,5 @@ export const teamJoinRequests = pgTable("team_join_requests", {
   userId: integer("user_id")
     .notNull()
     .references(() => users.id),
-  status: joinRequestStatusEnum("status").default("NA_CEKANJU").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { teamMembers, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -23,8 +23,7 @@ export async function GET(req: NextRequest) {
         role: users.role,
       })
       .from(users)
-      .innerJoin(teamMembers, eq(users.id, teamMembers.userId))
-      .where(eq(teamMembers.teamId, idNumber));
+      .where(eq(users.teamId, idNumber));
 
     if (members.length === 0) {
       return NextResponse.json(
