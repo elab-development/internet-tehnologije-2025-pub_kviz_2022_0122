@@ -92,7 +92,6 @@ export const eventResults = pgTable("event_results", {
 });
 
 export const teamJoinRequests = pgTable("team_join_requests", {
-  id: serial("id").primaryKey(),
   teamId: integer("team_id")
     .notNull()
     .references(() => teams.id),

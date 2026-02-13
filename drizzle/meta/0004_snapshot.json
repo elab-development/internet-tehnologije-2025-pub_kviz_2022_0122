@@ -1,6 +1,6 @@
 {
-  "id": "eb8b5e59-2ac6-40c6-8f2d-65a2710cbd03",
-  "prevId": "0f48a1d7-4c57-4651-bb88-a341028a895c",
+  "id": "1794ce13-4d13-4a29-b7db-44326cdfc2b7",
+  "prevId": "eb8b5e59-2ac6-40c6-8f2d-65a2710cbd03",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -284,12 +284,6 @@
       "name": "team_join_requests",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
         "team_id": {
           "name": "team_id",
           "type": "integer",
