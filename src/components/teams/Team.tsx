@@ -22,7 +22,7 @@ export const Team: React.FC = () => {
     }
     const fetchTeamData = async () => {
       try {
-        const response = await fetch(`/api/team?id=${user?.id}`, {
+        const response = await fetch(`/api/team?id=${user?.teamId}`, {
           credentials: "include",
         });
         const data = await response.json();
@@ -37,7 +37,7 @@ export const Team: React.FC = () => {
     };
 
     fetchTeamData();
-  }, [user?.id, status]);
+  }, [user?.teamId, status]);
 
   if (status === "loading" || (loading && status === "authenticated")) {
     return (

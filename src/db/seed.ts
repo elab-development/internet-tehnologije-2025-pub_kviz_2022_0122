@@ -2,7 +2,6 @@ import "dotenv/config";
 import {
   users,
   teams,
-  teamMembers,
   teamJoinRequests,
   leagues,
   seasons,
@@ -20,105 +19,14 @@ await db.transaction(async (tx) => {
 
   await tx.delete(eventResults);
   await tx.delete(eventRegistrations);
+  await tx.delete(teamJoinRequests);
   await tx.delete(events);
   await tx.delete(seasons);
-  await tx.delete(leagues);
-  await tx.delete(teamJoinRequests);
-  await tx.delete(teamMembers);
-  await tx.delete(teams);
   await tx.delete(users);
+  await tx.delete(teams);
+  await tx.delete(leagues);
 
   console.log("✅ Svi podaci su obrisani!");
-
-  const insertedUsers = await tx
-    .insert(users)
-    .values([
-      {
-        email: "admin@example.com",
-        passwordHash: hash,
-        name: "Marko Administrator",
-        role: "ADMIN",
-      },
-      {
-        email: "organizator@example.com",
-        passwordHash: hash,
-        name: "Jelena Organizator",
-        role: "ORGANIZER",
-      },
-      {
-        email: "nikola@example.com",
-        passwordHash: hash,
-        name: "Nikola Petrović",
-        role: "PLAYER",
-      },
-      {
-        email: "milica@example.com",
-        passwordHash: hash,
-        name: "Milica Jovanović",
-        role: "PLAYER",
-      },
-      {
-        email: "stefan@example.com",
-        passwordHash: hash,
-        name: "Stefan Đorđević",
-        role: "PLAYER",
-      },
-      {
-        email: "ana@example.com",
-        passwordHash: hash,
-        name: "Ana Ilić",
-        role: "PLAYER",
-      },
-      {
-        email: "dušan@example.com",
-        passwordHash: hash,
-        name: "Dušan Lukić",
-        role: "PLAYER",
-      },
-      {
-        email: "jovana@example.com",
-        passwordHash: hash,
-        name: "Jovana Kostić",
-        role: "PLAYER",
-      },
-    ])
-    .returning();
-
-  console.log("✅ Korisnici su uspešno uneti!");
-
-  const insertedTeams = await tx
-    .insert(teams)
-    .values([
-      {
-        name: "Beogradski Fantom",
-        captainId: insertedUsers[2].id,
-      },
-      {
-        name: "Zoki i ekipa",
-        captainId: insertedUsers[5].id,
-      },
-      {
-        name: "Maxbet premium partner evrolige",
-        captainId: insertedUsers[7].id,
-      },
-    ])
-    .returning();
-
-  console.log("✅ Timovi su uspešno uneti!");
-
-  await tx.insert(teamMembers).values([
-
-    { teamId: insertedTeams[0].id, userId: insertedUsers[2].id },
-    { teamId: insertedTeams[0].id, userId: insertedUsers[3].id },
-    { teamId: insertedTeams[0].id, userId: insertedUsers[4].id },
-    
-    { teamId: insertedTeams[1].id, userId: insertedUsers[5].id },
-    { teamId: insertedTeams[1].id, userId: insertedUsers[6].id },
-    
-    { teamId: insertedTeams[2].id, userId: insertedUsers[7].id },
-  ]);
-
-  console.log("✅ Članovi timova su uspešno uneti!");
 
   const insertedLeagues = await tx
     .insert(leagues)
@@ -143,6 +51,103 @@ await db.transaction(async (tx) => {
       },
     ])
     .returning();
+
+  const insertedTeams = await tx
+    .insert(teams)
+    .values([
+      {
+        name: "Beogradski Fantom",
+        leagueId: insertedLeagues[0].id,
+      },
+      {
+        name: "Zoki i ekipa",
+        leagueId: insertedLeagues[0].id,
+      },
+      {
+        name: "Maxbet premium partner evrolige",
+        leagueId: insertedLeagues[0].id,
+      },
+    ])
+    .returning();
+
+  console.log("✅ Timovi su uspešno uneti!");
+
+  const insertedUsers = await tx
+    .insert(users)
+    .values([
+      {
+        email: "admin@example.com",
+        passwordHash: hash,
+        name: "Marko Administrator",
+        role: "ADMIN",
+        captain: false,
+      },
+      {
+        email: "organizator@example.com",
+        passwordHash: hash,
+        name: "Jelena Organizator",
+        role: "ORGANIZER",
+        captain: false,
+      },
+      {
+        email: "nikola@example.com",
+        passwordHash: hash,
+        name: "Nikola Petrović",
+        role: "PLAYER",
+        teamId: insertedTeams[0].id,
+        captain: true,
+      },
+      {
+        email: "milica@example.com",
+        passwordHash: hash,
+        name: "Milica Jovanović",
+        role: "PLAYER",
+        teamId: insertedTeams[0].id,
+        captain: false,
+      },
+      {
+        email: "stefan@example.com",
+        passwordHash: hash,
+        name: "Stefan Đorđević",
+        role: "PLAYER",
+        teamId: insertedTeams[0].id,
+        captain: false,
+      },
+      {
+        email: "ana@example.com",
+        passwordHash: hash,
+        name: "Ana Ilić",
+        role: "PLAYER",
+        teamId: insertedTeams[1].id,
+        captain: true,
+      },
+      {
+        email: "dušan@example.com",
+        passwordHash: hash,
+        name: "Dušan Lukić",
+        role: "PLAYER",
+        teamId: insertedTeams[1].id,
+        captain: false,
+      },
+      {
+        email: "jovana@example.com",
+        passwordHash: hash,
+        name: "Jovana Kostić",
+        role: "PLAYER",
+        teamId: insertedTeams[2].id,
+        captain: true,
+      },
+      {
+        email: "luka@example.com",
+        passwordHash: hash,
+        name: "Luka Matić",
+        role: "PLAYER",
+        captain: false,
+      },
+    ])
+    .returning();
+
+  console.log("✅ Korisnici su uspešno uneti!");
 
   const insertedEvents = await tx
     .insert(events)

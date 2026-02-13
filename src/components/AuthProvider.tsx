@@ -15,6 +15,8 @@ export type User = {
   name: string;
   email: string;
   role: string;
+  teamId: number | null;
+  captain: boolean;
   createdAt: string;
 };
 
