@@ -99,4 +99,7 @@ export const teamJoinRequests = pgTable("team_join_requests", {
     .notNull()
     .references(() => users.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+}, (t) => ({
+  pk: primaryKey({ columns: [t.teamId, t.userId] }),
+  }
+));

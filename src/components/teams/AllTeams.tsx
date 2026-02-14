@@ -32,6 +32,23 @@ export default function AllTeams({ teamData }: AllTeamsProps) {
 
     fetchAllTeams();
   }, [user?.id, status]);
+
+  const handleJoinRequest = async (teamId: number) => {
+    try {
+      const response = await fetch(`/api/join?id=${teamId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Greška pri slanju zahteva za ulazak u tim");
+      }
+    } catch (err: any) {
+      console.error("Greška pri slanju zahteva:", err);
+    }
+  }
+
   return (
     <div className="lg:col-span-3 border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
       <h2 className="text-2xl font-bold mb-6 text-black">Svi timovi</h2>
@@ -65,7 +82,7 @@ export default function AllTeams({ teamData }: AllTeamsProps) {
 
             {!teamData?.id && (
               <Button
-                onClick={() => console.log("Zahtev za:", team.id)}
+                onClick={() => handleJoinRequest(team.id)}
                 label="Pošalji zahtev"
               />
             )}

@@ -6,10 +6,18 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const requestedTeamId = searchParams.get("id");
-  const idNumber = Number(requestedTeamId);
-  if (!idNumber) {
+
+  if (requestedTeamId == undefined || requestedTeamId == null || requestedTeamId.trim() === "") {
     return NextResponse.json(
       { error: "teamId query parameter is required" },
+      { status: 400 },
+    );
+  }
+
+  const idNumber = Number(requestedTeamId);
+  if (!idNumber || Number.isNaN(idNumber) || idNumber <= 0) {
+    return NextResponse.json(
+      { error: "teamId query parameter is invalid" },
       { status: 400 },
     );
   }
