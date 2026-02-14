@@ -38,10 +38,10 @@ export default function AllTeams({ teamData }: AllTeamsProps) {
       const response = await fetch(`/api/join?id=${teamId}`, {
         method: "POST",
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
       });
-
+      const data = await response.json();
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || "Greška pri slanju zahteva za ulazak u tim");
       }
     } catch (err: any) {
