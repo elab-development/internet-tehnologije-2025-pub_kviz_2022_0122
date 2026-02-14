@@ -1,0 +1,1 @@
+ALTER TABLE "team_join_requests" ADD CONSTRAINT "team_join_requests_team_id_user_id_pk" PRIMARY KEY("team_id","user_id");
