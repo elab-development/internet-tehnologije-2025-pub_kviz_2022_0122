@@ -22,7 +22,7 @@ export const TeamSection: React.FC = () => {
     }
     const fetchTeamData = async () => {
       try {
-        const response = await fetch(`/api/team?id=${user?.id}`, {
+        const response = await fetch(`/api/team?id=${user?.teamId}`, {
           credentials: "include",
         });
         const data = await response.json();
