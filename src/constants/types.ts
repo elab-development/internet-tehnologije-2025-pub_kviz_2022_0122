@@ -14,3 +14,11 @@ export type TeamResponse = {
     name: string;
   };
 };
+
+export type TeamJoinRequest = {
+  teamId: number;
+  userId: number;
+  name: string;
+  email: string;
+  createdAt: string;
+};

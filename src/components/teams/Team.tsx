@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import type { TeamResponse } from "@/constants/types";
 import TeamMembers from "@/components/teams/TeamMembers";
-import TeamAchievements from "@/components/teams/TeamAchievements";
+import TeamJoinRequest from "@/components/teams/TeamJoinRequest";
 import AllTeams from "@/components/teams/AllTeams";
 import MyTeam from "@/components/teams/MyTeam";
 
@@ -56,7 +56,7 @@ export const Team: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <TeamMembers teamData={teamData} />
-          <TeamAchievements teamData={teamData} />
+          <TeamJoinRequest teamData={teamData} />
           <AllTeams teamData={teamData} />
         </div>
       </div>
