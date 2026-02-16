@@ -144,7 +144,8 @@ export default function EventSection() {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="group relative bg-white/10 backdrop-blur-sm border-2 border-pub-orange/50 rounded-2xl overflow-hidden hover:border-pub-orange hover:shadow-2xl hover:shadow-pub-orange/20 transition-all duration-300 hover:-translate-y-2"
+                className="group relative bg-white/10 backdrop-blur-sm border-2 border-pub-orange/50 rounded-2xl overflow-hidden 
+                hover:border-pub-orange hover:shadow-2xl hover:shadow-pub-orange/20 transition-all duration-300 hover:-translate-y-2"
               >
                 <div className="absolute top-4 right-4 bg-pub-orange text-black rounded-xl p-3 text-center shadow-lg z-10">
                   <div className="text-2xl font-bold leading-none">
@@ -157,7 +158,7 @@ export default function EventSection() {
 
                 <div className="absolute inset-0 bg-linear-to-br from-pub-orange/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                <div className="p-6 relative z-10">
+                <div className="p-6 relative z-10 flex flex-col h-full">
                   <h3 className="text-2xl font-bold mb-4 text-white group-hover:text-pub-orange transition-colors pr-20">
                     {event.name}
                   </h3>
@@ -200,22 +201,20 @@ export default function EventSection() {
                       </div>
                     </div>
                   </div>
+                  <div className="mt-auto flex flex-col gap-4">
+                    <Button
+                      onClick={() => router.push(`/events/${event.id}`)}
+                      label="Prijavi se →"
+                    />
 
-                  <Button
-                    onClick={() => router.push(`/events/${event.id}`)}
-                    label="Prijavi se →"
-                  />
-                  {user?.role === "ADMIN" || user?.role === "ORGANIZER" ? (
-                    <div className="mt-4">
+                    {(user?.role === "ADMIN" || user?.role === "ORGANIZER") && (
                       <Button
                         onClick={() => handleDelete(event.id)}
                         label="Obriši događaj"
                       />
-                    </div>
-                  ) : null}
+                    )}
+                  </div>
                 </div>
-
-                <div className="h-1 bg-linear-to-r from-transparent via-pub-orange to-transparent"></div>
               </div>
             ))}
           </div>
