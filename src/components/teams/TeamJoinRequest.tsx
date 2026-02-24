@@ -9,7 +9,6 @@ export default function TeamJoinRequest({
 }) {
   const [joinRequests, setJoinRequests] = useState<TeamJoinRequest[]>([]);
   const { user, status } = useAuth();
-  
 
   if (!teamData?.id) {
     return null;
@@ -17,7 +16,7 @@ export default function TeamJoinRequest({
 
   useEffect(() => {
     const fetchJoinRequests = async () => {
-      try{
+      try {
         const response = await fetch(`/api/join?id=${teamData.id}`, {
           method: "GET",
           credentials: "include",
@@ -25,14 +24,14 @@ export default function TeamJoinRequest({
         const data = await response.json();
         if (response.ok) {
           setJoinRequests(Array.isArray(data) ? data : []);
-        }else {
+        } else {
           console.error("Greška pri dohvatanju svih requestova:", data);
           setJoinRequests([]);
         }
       } catch (error) {
         console.error("Error fetching join requests:", error);
       }
-    }
+    };
     fetchJoinRequests();
   }, [teamData?.id]);
 
@@ -47,16 +46,14 @@ export default function TeamJoinRequest({
 
       if (!res.ok) throw new Error("Greška pri prihvatanju");
 
-      setJoinRequests((prev) =>
-        prev.filter((r) => r.userId !== userId)
-      );
+      setJoinRequests((prev) => prev.filter((r) => r.userId !== userId));
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleReject = async (userId: number) => {
-    try {      
+    try {
       const res = await fetch(`/api/join?id=${userId}`, {
         method: "DELETE",
         credentials: "include",
@@ -79,41 +76,45 @@ export default function TeamJoinRequest({
       {joinRequests.length === 0 ? (
         <div className="space-y-4">
           <div className="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-300">
-            <div className="text-sm text-gray-600">Nema zahteva za članstvo.</div>
+            <div className="text-sm text-gray-600">
+              Nema zahteva za članstvo.
+            </div>
           </div>
         </div>
       ) : (
         joinRequests.map((request) => (
-        <div key={request.userId || request.email} className="mb-4">
-  <div className="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-300 flex items-center justify-between gap-4">
-    
-    <div className="min-w-0"> 
-      <div className="font-semibold text-black truncate">{request.name}</div>
-      <div className="text-sm text-gray-600 truncate">{request.email}</div>
-    </div>
+          <div key={request.userId || request.email} className="mb-4">
+            <div className="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-300 flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="font-semibold text-black truncate">
+                  {request.name}
+                </div>
+                <div className="text-sm text-gray-600 truncate">
+                  {request.email}
+                </div>
+              </div>
 
-    {user?.captain && (
-      <div className="flex items-center gap-2 shrink-0">
-      <button 
-        onClick={() => handleReject(request.userId)} 
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-red-300 hover:bg-red-600 hover:text-white text-pub-gray transition-colors shadow-sm"
-        title="Odbij zahtev"
-      >
-        ✕
-      </button>
-      <button 
-        onClick={() => handleAccept(request.userId)}
-        className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-green-300 hover:bg-green-600 hover:text-white text-pub-gray transition-colors shadow-sm"
-        title="Prihvati zahtev"
-      >
-        ✓
-      </button>
-      </div>
-    )}
-
-  </div>
-</div>
-        ))    
+              {user?.captain && (
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => handleReject(request.userId)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-red-300 hover:bg-red-600 hover:text-white text-pub-gray transition-colors shadow-sm"
+                    title="Odbij zahtev"
+                  >
+                    ✕
+                  </button>
+                  <button
+                    onClick={() => handleAccept(request.userId)}
+                    className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-green-300 hover:bg-green-600 hover:text-white text-pub-gray transition-colors shadow-sm"
+                    title="Prihvati zahtev"
+                  >
+                    ✓
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))
       )}
     </div>
   );

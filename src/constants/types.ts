@@ -22,3 +22,28 @@ export type TeamJoinRequest = {
   email: string;
   createdAt: string;
 };
+
+export interface League {
+  id: number;
+  name: string;
+  seasonCount?: number;
+}
+
+export interface Season {
+  id: number;
+  leagueId: number;
+  name: string;
+  isActive: boolean;
+}
+
+export interface SpecificLeague {
+  id: number;
+  name: string;
+  seasons: Season[];
+}
+
+export interface Standing {
+  placement: number;
+  teamId: number;
+  teamName: string;
+}
