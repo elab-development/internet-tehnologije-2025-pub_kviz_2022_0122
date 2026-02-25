@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { menuItems } from "@/constants/menuItems";
+import { menuItems, getHref } from "@/constants/menuItems";
 import Logo from "@/components/Logo";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
   const router = useRouter();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -26,7 +28,7 @@ export default function Navbar() {
             {menuItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={getHref(item.href, user)}
                   className="inline-block text-white font-semibold hover:text-pub-beige hover:scale-110 transition-transform duration-500"
                 >
                   {item.label}
@@ -62,8 +64,8 @@ export default function Navbar() {
             {menuItems.map((item) => (
               <li key={item.href}>
                 <button
-                  onClick={() => {
-                    router.push(item.href);
+                  onClick={async () => {
+                    router.push(getHref(item.href, user));
                     setIsOpen(false);
                   }}
                   className="block px-3 py-2 text-pub-blue font-semibold w-full text-left cursor-pointer border-pub-blue border-b  hover:bg-pub-blue/20 rounded transition-all duration-1000"

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import { SpecificLeague, Season } from "@/constants/types";
+import { SpecificLeague } from "@/constants/types";
 import SeasonsComponent from "@/components/leagues/SeasonsComponent";
 import SpecificLeagueComponent from "@/components/leagues/SpecificLeague";
 

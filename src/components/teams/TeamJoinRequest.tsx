@@ -68,53 +68,63 @@ export default function TeamJoinRequest({
   };
 
   return (
-    <div className="border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
-      <h2 className="text-2xl font-bold mb-6 text-black flex items-center gap-2">
+    <div className=" bg-transparent shadow-xl rounded-2xl p-6">
+      <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
         Zahtevi za članstvo
       </h2>
 
       {joinRequests.length === 0 ? (
         <div className="space-y-4">
-          <div className="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-300">
-            <div className="text-sm text-gray-600">
+          <div className="p-4 bg-white/10 rounded-xl border border-pub-gray/50">
+            <div className="text-sm text-white/90">
               Nema zahteva za članstvo.
             </div>
           </div>
         </div>
       ) : (
-        joinRequests.map((request) => (
-          <div key={request.userId || request.email} className="mb-4">
-            <div className="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-xl border border-yellow-300 flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <div className="font-semibold text-black truncate">
-                  {request.name}
+        joinRequests.map((request) =>
+          user?.teamId === teamData.id ? (
+            <div key={request.userId || request.email} className="mb-4">
+              <div className="p-4 bg-transparent rounded-xl border border-pub-gray/50 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <div className="font-semibold text-white truncate">
+                    {request.name}
+                  </div>
+                  <div className="text-sm text-white/80 truncate">
+                    {request.email}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-600 truncate">
-                  {request.email}
+
+                {user?.captain && (
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => handleReject(request.userId)}
+                      className="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer bg-transparent border-2 border-red-300 hover:bg-red-600 hover:text-white text-pub-gray transition-colors shadow-sm"
+                      title="Odbij zahtev"
+                    >
+                      ✕
+                    </button>
+                    <button
+                      onClick={() => handleAccept(request.userId)}
+                      className="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer bg-transparent border-2 border-green-300 hover:bg-green-600 hover:text-white text-pub-gray transition-colors shadow-sm"
+                      title="Prihvati zahtev"
+                    >
+                      ✓
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div key={request.userId || request.email} className="mb-4">
+              <div className="p-4 bg-white/10 rounded-xl border border-pub-gray/50">
+                <div className="text-sm text-white/90">
+                  Nema zahteva za članstvo.
                 </div>
               </div>
-
-              {user?.captain && (
-                <div className="flex items-center gap-2 shrink-0">
-                  <button
-                    onClick={() => handleReject(request.userId)}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-red-300 hover:bg-red-600 hover:text-white text-pub-gray transition-colors shadow-sm"
-                    title="Odbij zahtev"
-                  >
-                    ✕
-                  </button>
-                  <button
-                    onClick={() => handleAccept(request.userId)}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-transparent border-2 border-green-300 hover:bg-green-600 hover:text-white text-pub-gray transition-colors shadow-sm"
-                    title="Prihvati zahtev"
-                  >
-                    ✓
-                  </button>
-                </div>
-              )}
             </div>
-          </div>
-        ))
+          ),
+        )
       )}
     </div>
   );

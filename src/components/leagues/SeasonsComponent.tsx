@@ -39,8 +39,8 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-1">
-        <div className="bg-white rounded-2xl shadow-xl border-2 border-pub-orange p-6 sticky top-24">
-          <h2 className="text-xl font-bold text-black mb-4">Sezone</h2>
+        <div className="bg-transparent rounded-2xl shadow-xl p-6 sticky top-24">
+          <h2 className="text-xl font-bold text-white mb-4">Sezone</h2>
 
           {league.seasons.length > 0 ? (
             <div className="space-y-2">
@@ -50,8 +50,8 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                   onClick={() => handleSeasonChange(season)}
                   className={`w-full text-left p-3 rounded-lg transition font-semibold ${
                     selectedSeason?.id === season.id
-                      ? "bg-pub-orange text-white shadow-lg"
-                      : "bg-pub-beige text-black hover:bg-orange-100"
+                      ? "bg-white text-pub-blue shadow-lg border-pub-gray/50 cursor-pointer"
+                      : "bg-white/10 text-white border border-pub-gray/50 hover:bg-white/20 cursor-pointer"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -73,11 +73,13 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
 
       <div className="lg:col-span-3">
         {selectedSeason ? (
-          <div className="bg-white rounded-2xl shadow-xl border-2 border-pub-orange overflow-hidden">
-            <div className="bg-linear-to-r from-pub-orange to-orange-400 text-white p-6">
-              <h2 className="text-2xl font-bold">{selectedSeason.name}</h2>
+          <div className="bg-white/10 rounded-2xl shadow-xl border border-pub-gray/50 overflow-hidden">
+            <div className="bg-white/30 text-white p-6">
+              <h2 className="text-2xl text-pub-blue shadow-2xl font-bold">
+                {selectedSeason.name}
+              </h2>
               {selectedSeason.isActive && (
-                <p className="text-orange-100">Sezona je trenutno aktivna</p>
+                <p className="text-white/80">Sezona je trenutno aktivna</p>
               )}
             </div>
 
@@ -103,11 +105,10 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                       {standings.map((standing, index) => (
                         <tr
                           key={standing.teamId}
-                          className="border-b border-pub-orange/10 hover:bg-pub-beige/50 transition"
+                          className="border-b border-pub-orange/10 hover:bg-white/10 transition"
                         >
                           <td className="py-4 px-4">
                             <div className="flex items-center">
-                              {/* Medal/Position */}
                               <div
                                 className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white mr-3 ${
                                   index === 0
@@ -121,12 +122,12 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                               >
                                 {index + 1}
                               </div>
-                              <span className="font-bold text-black">
+                              <span className="font-bold text-white">
                                 {index + 1}.
                               </span>
                             </div>
                           </td>
-                          <td className="py-4 px-4 text-black font-semibold">
+                          <td className="py-4 px-4 text-white font-semibold">
                             {standing.teamName}
                           </td>
                         </tr>
@@ -136,7 +137,7 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-500 text-lg">
+                  <p className="text-white/80 text-lg">
                     Nema dostupnih rezultata za ovu sezonu
                   </p>
                 </div>
@@ -144,8 +145,8 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow-xl border-2 border-pub-orange p-12 flex items-center justify-center">
-            <p className="text-gray-500 text-lg">
+          <div className="bg-white/10 rounded-2xl shadow-xl border border-pub-gray p-12 flex items-center justify-center">
+            <p className="text-white text-lg">
               Izaberite sezonu da vidite tabelu
             </p>
           </div>

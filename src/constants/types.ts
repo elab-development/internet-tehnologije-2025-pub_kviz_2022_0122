@@ -5,6 +5,16 @@ export type TeamMember = {
   role: string;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  teamId: number | null;
+  captain: boolean;
+  createdAt: string;
+};
+
 export type TeamResponse = {
   id: number;
   name: string;

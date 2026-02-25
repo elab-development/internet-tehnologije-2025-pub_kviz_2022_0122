@@ -1,5 +1,5 @@
-import { Team } from "@/components/teams/Team";
+import { NoTeam } from "@/components/teams/NoTeam";
 
-export default function EventsPage() {
-  return <Team />;
+export default function TeamsPage() {
+  return <NoTeam />;
 }

@@ -165,7 +165,6 @@ export async function DELETE(req: Request) {
   }
 
   try {
-    // Proveravamo da li je korisnik kapiten tima
     const captainStatus = await isCaptain(
       Number(claims.sub),
       parseInt(teamReqId),

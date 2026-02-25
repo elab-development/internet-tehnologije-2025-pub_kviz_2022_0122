@@ -144,7 +144,7 @@ export default function EventSection() {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="group relative bg-white/10 backdrop-blur-sm border-2 border-pub-orange/50 rounded-2xl overflow-hidden 
+                className="group relative bg-white/10 backdrop-blur-sm border-2 border-pub-gray/50 rounded-2xl overflow-hidden 
                 hover:border-pub-orange hover:shadow-2xl hover:shadow-pub-orange/20 transition-all duration-300 hover:-translate-y-2"
               >
                 <div className="absolute top-4 right-4 bg-pub-orange text-black rounded-xl p-3 text-center shadow-lg z-10">

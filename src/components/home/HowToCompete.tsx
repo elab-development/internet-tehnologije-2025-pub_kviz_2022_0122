@@ -4,9 +4,10 @@ import Button from "@/components/Button";
 import { steps } from "@/constants/competeSteps";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import { getHref } from "@/constants/menuItems";
 
 export default function HowItWorks() {
-  const { status } = useAuth();
+  const { status, user } = useAuth();
   const router = useRouter();
   return (
     <section className="py-20 bg-transparent text-white z-10 relative overflow-hidden">
@@ -75,7 +76,7 @@ export default function HowItWorks() {
             {status === "authenticated" ? (
               <Button
                 onClick={() => {
-                  router.push("/team");
+                  router.push(getHref("/team", user));
                 }}
                 label="Pronađi tim →"
               />

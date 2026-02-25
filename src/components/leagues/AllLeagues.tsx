@@ -20,17 +20,17 @@ export default function AllLeagues({ leagues }: LeagueTableProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {leagues.map((league) => (
               <Link href={`/league/${league.id}`} key={league.id}>
-                <div className="group h-full bg-white/70 rounded-2xl shadow-lg border-2 border-pub-orange/20 p-8 hover:border-pub-orange hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105">
+                <div className="group h-full bg-white/10 rounded-2xl shadow-lg border-2 border-pub-gray/50 p-8 hover:border-pub-orange hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:scale-105">
                   <div className="w-16 h-16 bg-linear-to-br from-pub-orange to-orange-400 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 group-hover:scale-110 transition-transform">
                     {league.name.charAt(0)}
                   </div>
 
-                  <h2 className="text-2xl font-bold text-pub-blue mb-2 group-hover:text-pub-orange transition">
+                  <h2 className="text-2xl font-bold text-white mb-2 group-hover:text-pub-orange transition">
                     {league.name}
                   </h2>
 
                   <div className="mb-6">
-                    <p className="text-pub-blue/80">
+                    <p className="text-white/80">
                       Pronađi sve sezone i leaderboard
                     </p>
                   </div>

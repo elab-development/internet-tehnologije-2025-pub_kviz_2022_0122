@@ -22,6 +22,10 @@ export const TeamSection: React.FC = () => {
     }
     const fetchTeamData = async () => {
       try {
+        if (!user.teamId) {
+          setTeamData(null);
+          return;
+        }
         const response = await fetch(`/api/team?id=${user?.teamId}`, {
           credentials: "include",
         });
@@ -42,7 +46,7 @@ export const TeamSection: React.FC = () => {
   }, [user?.id, status]);
 
   return (
-    <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-white/10 p-6 mt-8 w-full">
+    <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-white/10 p-6 mt-8 w-full rounded-xl">
       <h2 className="mb-4 xl:text-4xl text-2xl font-semibold">
         Želiš da učestvuješ u kvizu?
       </h2>
@@ -58,7 +62,7 @@ export const TeamSection: React.FC = () => {
 
           <Button
             onClick={() => {
-              router.push("/team");
+              router.push(`/team/${user?.teamId || ""}`);
             }}
             label="Moj tim"
           />
@@ -70,9 +74,7 @@ export const TeamSection: React.FC = () => {
             kvizovima sa prijateljima!
           </p>
           <Button
-            onClick={() => {
-              router.push("/team");
-            }}
+            onClick={() => router.push("/team")}
             label="Pridruži se timu"
           />
         </div>

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { teams, users } from "@/db/schema";
+import { users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -25,55 +25,54 @@ export async function GET(req: NextRequest) {
     }
 
     const { searchParams } = new URL(req.url);
-    const requestedTeamId = searchParams.get("id");
+    const requestedUserId = searchParams.get("id");
 
-    if (!requestedTeamId) {
+    if (!requestedUserId) {
       const rows = await db
         .select({
-          id: teams.id,
-          name: teams.name,
-          createdAt: teams.createdAt,
-          captain: {
-            id: users.id,
-            name: users.name,
-          },
+          id: users.id,
+          name: users.name,
+          email: users.email,
+          role: users.role,
+          createdAt: users.createdAt,
+          teamId: users.teamId,
+          captain: users.captain,
         })
-        .from(teams)
-        .innerJoin(users, eq(teams.id, users.teamId))
-        .where(eq(users.captain, true));
+        .from(users);
 
       return NextResponse.json(rows);
     }
 
-    const teamIdNumber = parseInt(requestedTeamId, 10);
+    const userIdNumber = parseInt(requestedUserId, 10);
 
     const rows = await db
       .select({
-        id: teams.id,
-        name: teams.name,
-        createdAt: teams.createdAt,
-        captain: {
-          id: users.id,
-          name: users.name,
-        },
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        role: users.role,
+        createdAt: users.createdAt,
+        teamId: users.teamId,
+        captain: users.captain,
       })
-      .from(teams)
-      .innerJoin(users, eq(teams.id, users.teamId))
-      .where(and(eq(teams.id, teamIdNumber), eq(users.captain, true)));
+      .from(users)
+      .where(eq(users.id, userIdNumber));
 
     if (rows.length === 0) {
       return NextResponse.json(
-        { error: "Korisnik nije član nijednog tima" },
+        { error: "Korisnik ne postoji" },
         { status: 404 },
       );
     }
 
     return NextResponse.json(rows[0]);
   } catch (error) {
-    console.error("Team API error:", error);
+    console.error("Users API error:", error);
+
     if (error instanceof Error) {
       console.error("Stack trace:", error.stack);
     }
+
     return NextResponse.json({ error: "Greška na serveru" }, { status: 500 });
   }
 }
