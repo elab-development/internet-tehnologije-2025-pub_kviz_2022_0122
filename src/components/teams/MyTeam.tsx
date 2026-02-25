@@ -52,7 +52,7 @@ export default function MyTeam({ teamData }: TeamProps) {
     fetchTeamMembers();
   }, [user?.id, status]);
   return (
-    <div className="relative overflow-hidden border-2 border-pub-orange bg-linear-to-br from-white to-orange-50 shadow-2xl rounded-2xl p-8 md:p-12">
+    <div className="relative overflow-hidden bg-transparent shadow-2xl rounded-2xl p-8 md:p-12">
       <div className="absolute top-0 right-0 w-64 h-64 bg-pub-orange opacity-10 rounded-full -mr-32 -mt-32"></div>
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-pub-orange opacity-10 rounded-full -ml-24 -mb-24"></div>
 
@@ -60,45 +60,51 @@ export default function MyTeam({ teamData }: TeamProps) {
         {teamData?.id ? (
           <div className="text-center md:text-left">
             <div className="inline-block px-4 py-1 bg-pub-orange/20 rounded-full mb-4">
-              <span className="text-pub-orange font-semibold text-sm">
-                Vaš tim
-              </span>
+              {teamData.id === user?.teamId ? (
+                <span className="text-pub-orange font-semibold text-sm">
+                  Vaš tim
+                </span>
+              ) : (
+                <span className="text-pub-orange font-semibold text-sm">
+                  Tim
+                </span>
+              )}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-black">
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-white">
               {teamData.name}
             </h1>
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-lg text-white/80 mb-6">
               Spremni za sledeći kviz!
             </p>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-              <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
+              <div className="bg-transparent backdrop-blur rounded-xl p-4 border border-pub-gray/50">
                 <div className="text-3xl font-bold text-pub-orange">
                   {teamData.captain?.name}
                 </div>
-                <div className="text-sm text-gray-600">Kapiten</div>
+                <div className="text-sm text-white/80">Kapiten</div>
               </div>
-              <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
+              <div className="bg-transparent backdrop-blur rounded-xl p-4 border border-pub-gray/50">
                 <div className="text-3xl font-bold text-pub-orange">
                   {getMonth(teamData.createdAt)}{" "}
                   {new Date(teamData.createdAt).getFullYear()}
                 </div>
-                <div className="text-sm text-gray-600">Tim kreiran</div>
+                <div className="text-sm text-white/80">Tim kreiran</div>
               </div>
-              <div className="bg-white/80 backdrop-blur rounded-xl p-4 border border-pub-orange/30">
+              <div className="bg-transparent backdrop-blur rounded-xl p-4 border border-pub-gray/50">
                 <div className="text-3xl font-bold text-pub-orange">
                   {teamMembers.length}
                 </div>
-                <div className="text-sm text-gray-600">Članovi</div>
+                <div className="text-sm text-white/80">Članovi</div>
               </div>
             </div>
           </div>
         ) : (
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-black">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
               Vreme je za tim!
             </h1>
-            <p className="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">
+            <p className="text-lg text-white/80 mb-6 max-w-2xl mx-auto">
               Pridruži se timu i takmiči se sa drugima.
             </p>
           </div>

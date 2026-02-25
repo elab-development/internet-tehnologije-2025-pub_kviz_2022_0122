@@ -9,16 +9,7 @@ import React, {
   useEffect,
 } from "react";
 import { useRouter } from "next/navigation";
-
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  teamId: number | null;
-  captain: boolean;
-  createdAt: string;
-};
+import { User } from "@/constants/types";
 
 type AuthState =
   | { status: "loading"; user: null }

@@ -35,12 +35,12 @@ export default function TeamMembers({ teamData }: TeamMembersProps) {
     return null;
   }
   return (
-    <div className="lg:col-span-2 border-2 border-pub-orange bg-white shadow-xl rounded-2xl p-6">
+    <div className="lg:col-span-2 bg-transparent shadow-xl rounded-2xl p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-black flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
           Članovi tima
         </h2>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-white/80">
           {teamMembers.length} ukupno
         </span>
       </div>
@@ -49,17 +49,17 @@ export default function TeamMembers({ teamData }: TeamMembersProps) {
         {teamMembers.map((member) => (
           <div
             key={member.id}
-            className="flex items-center justify-between p-4 bg-linear-to-r from-orange-50 to-white border border-pub-orange/20 rounded-xl hover:shadow-md transition-all"
+            className="flex items-center justify-between p-4 bg-transparent border-b border-pub-gray/50 rounded-xl hover:shadow-md transition-all"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-pub-orange rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-12 h-12 bg-linear-to-br from-pub-orange to-orange-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
                 {member.name.charAt(0)}
               </div>
               <div>
-                <div className="font-semibold text-black flex items-center gap-2">
+                <div className="font-semibold text-white flex items-center gap-2">
                   {member.name}
                   {member.id === teamData.captain?.id && (
-                    <span className="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full">
+                    <span className="text-xs bg-yellow-300 mx-2 text-black px-4 py-0.5 rounded-full">
                       Kapiten
                     </span>
                   )}

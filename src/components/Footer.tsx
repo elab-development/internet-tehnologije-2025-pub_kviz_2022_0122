@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { menuItems } from "@/constants/menuItems";
 import Logo from "@/components/Logo";
+import { getHref } from "@/constants/menuItems";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Footer() {
+  const { user } = useAuth();
   return (
     <footer
       className="bg-pub-gray text-black z-10 relative bottom-0"
@@ -22,7 +25,7 @@ export default function Footer() {
           {menuItems.map((item) => (
             <Link
               key={item.label}
-              href={item.href}
+              href={getHref(item.href, user)}
               className="opacity-90 hover:opacity-100 hover:scale-105 transition-transform duration-500"
             >
               {item.label}
