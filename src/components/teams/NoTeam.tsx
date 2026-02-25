@@ -1,44 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
-import type { TeamResponse } from "@/constants/types";
-import TeamMembers from "@/components/teams/TeamMembers";
-import TeamJoinRequest from "@/components/teams/TeamJoinRequest";
+
 import AllTeams from "@/components/teams/AllTeams";
 
-export const NoTeam: React.FC = () => {
+export default function NoTeam() {
   const { user, status, refresh } = useAuth();
-  const [teamData, setTeamData] = useState<TeamResponse | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "loading") return;
-
     if (status === "unauthenticated" || !user) {
       refresh();
       return;
     }
-    const fetchTeamData = async () => {
-      try {
-        const response = await fetch(`/api/team?id=${user?.teamId}`, {
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setTeamData(data);
-        }
-      } catch (err) {
-        console.error("Greška pri dohvatanju tima:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTeamData();
   }, [user?.teamId, status]);
 
-  if (status === "loading" || (loading && status === "authenticated")) {
+  if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-xl font-bold text-pub-orange">
@@ -68,9 +45,9 @@ export const NoTeam: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <AllTeams teamData={teamData} />
+          <AllTeams />
         </div>
       </div>
     </div>
   );
-};
+}

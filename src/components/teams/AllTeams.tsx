@@ -4,14 +4,8 @@ import { useEffect, useState, useMemo } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
 
-interface AllTeamsProps {
-  teamData: TeamResponse | null;
-}
-
-export default function AllTeams({ teamData }: AllTeamsProps) {
+export default function AllTeams() {
   const [allTeams, setAllTeams] = useState<TeamResponse[]>([]);
-  const [sentRequests, setSentRequests] = useState<Set<number>>(new Set());
-  const [loadingTeamId, setLoadingTeamId] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -38,28 +32,6 @@ export default function AllTeams({ teamData }: AllTeamsProps) {
 
     fetchAllTeams();
   }, [user?.id, status]);
-
-  const handleJoinRequest = async (teamId: number) => {
-    try {
-      setLoadingTeamId(teamId);
-
-      const response = await fetch(`/api/join?id=${teamId}`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
-
-      setSentRequests((prev) => new Set(prev).add(teamId));
-    } finally {
-      setLoadingTeamId(null);
-    }
-  };
 
   const filteredTeams = useMemo(() => {
     return allTeams.filter((team) =>
@@ -123,29 +95,10 @@ export default function AllTeams({ teamData }: AllTeamsProps) {
                 <div className="text-white/80">kapiten</div>
               </div>
             </div>
-
-            {!teamData?.id && !sentRequests.has(team.id) && (
-              <Button
-                onClick={() => handleJoinRequest(team.id)}
-                label={
-                  loadingTeamId === team.id ? "Slanje..." : "Pošalji zahtev"
-                }
-                disabled={loadingTeamId === team.id}
-              />
-            )}
-
-            {!teamData?.id && sentRequests.has(team.id) && (
-              <div className="text-green-600 font-semibold text-center py-2">
-                ✓ Zahtev poslat
-              </div>
-            )}
-
-            {teamData?.id && (
-              <Button
-                onClick={() => router.push(`/team/${team.id}`)}
-                label="Pogledaj tim"
-              />
-            )}
+            <Button
+              onClick={() => router.push(`/team/${team.id}`)}
+              label="Pogledaj tim"
+            />
           </div>
         ))}
       </div>

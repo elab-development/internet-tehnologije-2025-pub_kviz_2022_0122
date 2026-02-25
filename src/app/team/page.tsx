@@ -1,4 +1,4 @@
-import { NoTeam } from "@/components/teams/NoTeam";
+import NoTeam from "@/components/teams/NoTeam";
 
 export default function TeamsPage() {
   return <NoTeam />;
