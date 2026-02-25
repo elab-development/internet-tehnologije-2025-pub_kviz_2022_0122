@@ -56,12 +56,6 @@ export async function GET(req: Request) {
   const requestedTeamId = searchParams.get("id");
 
   try {
-    if (!requestedTeamId) {
-      return NextResponse.json(
-        { error: "Team ID nije pronađen" },
-        { status: 400 },
-      );
-    }
     const teamJoinReqs = await db
       .select({
         teamId: teamJoinRequests.teamId,
@@ -72,11 +66,15 @@ export async function GET(req: Request) {
       })
       .from(teamJoinRequests)
       .innerJoin(users, eq(teamJoinRequests.userId, users.id))
-      .where(eq(teamJoinRequests.teamId, parseInt(requestedTeamId)));
+      .where(
+        requestedTeamId
+          ? eq(teamJoinRequests.teamId, parseInt(requestedTeamId))
+          : undefined,
+      );
 
     return NextResponse.json(teamJoinReqs);
   } catch (err: any) {
-    return NextResponse.json({ err }, { status: 401 });
+    return NextResponse.json({ error: "Greška na serveru" }, { status: 500 });
   }
 }
 
