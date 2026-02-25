@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { TeamResponse, TeamMember } from "@/constants/types";
 import { useAuth } from "@/components/AuthProvider";
+import Button from "@/components/Button";
 
 interface TeamProps {
   teamData: TeamResponse | null;
@@ -8,7 +9,8 @@ interface TeamProps {
 
 export default function MyTeam({ teamData }: TeamProps) {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [sentRequests, setSentRequests] = useState<Set<number>>(new Set());
+  const [loadingTeamId, setLoadingTeamId] = useState<number | null>(null);
   const { user, status } = useAuth();
 
   const getMonth = (value: string) => {
@@ -44,13 +46,54 @@ export default function MyTeam({ teamData }: TeamProps) {
         }
       } catch (err) {
         console.error("Greška pri dohvatanju clanova:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
+    const fetchSentRequests = async () => {
+      try {
+        const response = await fetch("/api/join", {
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (response.ok && Array.isArray(data)) {
+          const myTeamIds = data
+            .filter((req) => req.userId === user?.id)
+            .map((req) => req.teamId);
+
+          setSentRequests(new Set(myTeamIds));
+        }
+      } catch (err) {
+        console.error("Greška pri dohvatanju poslatih zahteva:", err);
+      }
+    };
+
+    fetchSentRequests();
     fetchTeamMembers();
-  }, [user?.id, status]);
+  }, [user?.id, status, sentRequests.size]);
+
+  const handleJoinRequest = async (teamId: number) => {
+    try {
+      setLoadingTeamId(teamId);
+
+      const response = await fetch(`/api/join?id=${teamId}`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+
+      setSentRequests((prev) => new Set(prev).add(teamId));
+    } finally {
+      setLoadingTeamId(null);
+    }
+  };
   return (
     <div className="relative overflow-hidden bg-transparent shadow-2xl rounded-2xl p-8 md:p-12">
       <div className="absolute top-0 right-0 w-64 h-64 bg-pub-orange opacity-10 rounded-full -mr-32 -mt-32"></div>
@@ -107,6 +150,25 @@ export default function MyTeam({ teamData }: TeamProps) {
             <p className="text-lg text-white/80 mb-6 max-w-2xl mx-auto">
               Pridruži se timu i takmiči se sa drugima.
             </p>
+          </div>
+        )}
+        {teamData?.id && teamData.id !== user?.teamId && !user?.teamId && (
+          <div className="bg-transparent backdrop-blur rounded-xl mt-10 flex items-center justify-center md:justify-start">
+            {!sentRequests.has(teamData.id) ? (
+              <Button
+                onClick={() => handleJoinRequest(teamData.id)}
+                label={
+                  loadingTeamId === teamData.id ? "Slanje..." : "Pošalji zahtev"
+                }
+                disabled={loadingTeamId === teamData.id}
+              />
+            ) : (
+              sentRequests.has(teamData.id) && (
+                <div className="text-green-500 font-semibold bg-green-500/20 border  border-green-500 self-center md:text-start p-4 w-auto rounded-4xl">
+                  ✓ Zahtev za članstvo poslat
+                </div>
+              )
+            )}
           </div>
         )}
       </div>

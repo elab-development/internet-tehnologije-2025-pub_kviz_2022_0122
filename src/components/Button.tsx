@@ -16,7 +16,7 @@ export default function Button({
   disabled,
 }: Props) {
   const styles =
-    "inline-flex text-center rounded-lg w-50 h-12 border border-pub-orange items-center justify-center bg-white/5 px-4 py-2 text-[1em] font-semibold text-pub-orange transition duration-500 hover:bg-pub-orange/70 hover:text-pub-beige cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex text-center rounded-4xl w-45 h-12 border border-pub-orange items-center justify-center bg-white/5 px-4 py-2 text-[1em] font-semibold text-pub-orange transition duration-500 hover:bg-pub-orange/70 hover:text-pub-beige cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
 
   if (href) {
     return (
