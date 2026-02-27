@@ -6,7 +6,7 @@ import {
   timestamp,
   pgEnum,
   integer,
-  boolean
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", [
@@ -31,8 +31,7 @@ export const users = pgTable("users", {
   name: varchar("name", { length: 100 }).notNull(),
   role: userRoleEnum("role").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  teamId: integer("team_id")
-    .references(() => teams.id),
+  teamId: integer("team_id").references(() => teams.id),
   captain: boolean("captain").notNull().default(false),
 });
 
@@ -61,6 +60,7 @@ export const events = pgTable("events", {
   theme: varchar("theme", { length: 150 }),
   location: varchar("location", { length: 150 }).notNull(),
   eventDate: timestamp("event_date").notNull(),
+  price: numeric("price", { precision: 10, scale: 2 }).notNull().default("0"),
   capacity: integer("capacity").notNull(),
 });
 
@@ -73,7 +73,7 @@ export const eventRegistrations = pgTable(
     teamId: integer("team_id")
       .notNull()
       .references(() => teams.id),
-    price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+    registeredAt: timestamp("registered_at").defaultNow().notNull(),
   },
   (t) => ({
     pk: primaryKey({ columns: [t.eventId, t.teamId] }),
@@ -91,15 +91,18 @@ export const eventResults = pgTable("event_results", {
   placement: integer("placement").notNull(),
 });
 
-export const teamJoinRequests = pgTable("team_join_requests", {
-  teamId: integer("team_id")
-    .notNull()
-    .references(() => teams.id),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-}, (t) => ({
-  pk: primaryKey({ columns: [t.teamId, t.userId] }),
-  }
-));
+export const teamJoinRequests = pgTable(
+  "team_join_requests",
+  {
+    teamId: integer("team_id")
+      .notNull()
+      .references(() => teams.id),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.teamId, t.userId] }),
+  }),
+);

@@ -1,12 +1,12 @@
-ALTER TABLE "team_members" DISABLE ROW LEVEL SECURITY;--> statement-breakpoint
-DROP TABLE "team_members" CASCADE;--> statement-breakpoint
-ALTER TABLE "teams" DROP CONSTRAINT "teams_captain_id_users_id_fk";
---> statement-breakpoint
-ALTER TABLE "teams" ADD COLUMN "league_id" integer NOT NULL;--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "team_id" integer;--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "captain" boolean;--> statement-breakpoint
-ALTER TABLE "teams" ADD CONSTRAINT "teams_league_id_leagues_id_fk" FOREIGN KEY ("league_id") REFERENCES "public"."leagues"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "users" ADD CONSTRAINT "users_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "team_join_requests" DROP COLUMN "status";--> statement-breakpoint
-ALTER TABLE "teams" DROP COLUMN "captain_id";--> statement-breakpoint
-DROP TYPE "public"."join_request_status";
+-- ALTER TABLE "team_members" DISABLE ROW LEVEL SECURITY;--> statement-breakpoint
+-- DROP TABLE "team_members" CASCADE;--> statement-breakpoint
+-- ALTER TABLE "teams" DROP CONSTRAINT "teams_captain_id_users_id_fk";
+-- --> statement-breakpoint
+-- ALTER TABLE "teams" ADD COLUMN "league_id" integer NOT NULL;--> statement-breakpoint
+-- ALTER TABLE "users" ADD COLUMN "team_id" integer;--> statement-breakpoint
+-- ALTER TABLE "users" ADD COLUMN "captain" boolean;--> statement-breakpoint
+-- ALTER TABLE "teams" ADD CONSTRAINT "teams_league_id_leagues_id_fk" FOREIGN KEY ("league_id") REFERENCES "public"."leagues"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "users" ADD CONSTRAINT "users_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "team_join_requests" DROP COLUMN "status";--> statement-breakpoint
+-- ALTER TABLE "teams" DROP COLUMN "captain_id";--> statement-breakpoint
+-- DROP TYPE "public"."join_request_status";
