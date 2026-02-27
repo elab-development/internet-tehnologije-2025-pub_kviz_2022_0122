@@ -1,15 +1,15 @@
-CREATE TYPE "public"."user_role" AS ENUM('PLAYER', 'ORGANIZER', 'ADMIN');--> statement-breakpoint
-CREATE TABLE "leagues" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" varchar(100) NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "users" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"email" varchar(255) NOT NULL,
-	"password_hash" text NOT NULL,
-	"name" varchar(100) NOT NULL,
-	"role" "user_role" NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "users_email_unique" UNIQUE("email")
-);
+-- CREATE TYPE "public"."user_role" AS ENUM('PLAYER', 'ORGANIZER', 'ADMIN');--> statement-breakpoint
+-- CREATE TABLE "leagues" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" varchar(100) NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "users" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"email" varchar(255) NOT NULL,
+-- 	"password_hash" text NOT NULL,
+-- 	"name" varchar(100) NOT NULL,
+-- 	"role" "user_role" NOT NULL,
+-- 	"created_at" timestamp DEFAULT now() NOT NULL,
+-- 	CONSTRAINT "users_email_unique" UNIQUE("email")
+-- );
