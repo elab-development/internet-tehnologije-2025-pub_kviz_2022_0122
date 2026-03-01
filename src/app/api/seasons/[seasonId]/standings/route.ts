@@ -1,7 +1,7 @@
 import { db } from "@/db";
-import { eventResults, teams, events } from "@/db/schema";
+import { eventResults, teams, events, leagues, seasons } from "@/db/schema";
 import { NextResponse } from "next/server";
-import { eq, inArray, asc, desc, sum } from "drizzle-orm";
+import { eq, inArray, asc, desc, sum, sql, and, isNull } from "drizzle-orm";
 
 export async function GET(
   req: Request,
@@ -9,20 +9,38 @@ export async function GET(
 ) {
   try {
     const { seasonId: seasonIdStr } = await params;
-    const seasonId = parseInt(seasonIdStr);
+    const seasonIdREQ = parseInt(seasonIdStr);
 
     const results = await db
       .select({
-        placement: sum(eventResults.placement),
+        totalPoints: sum(eventResults.placement),
         teamId: eventResults.teamId,
         teamName: teams.name,
       })
       .from(teams)
       .leftJoin(eventResults, eq(eventResults.teamId, teams.id))
       .leftJoin(events, eq(eventResults.eventId, events.id))
-      .where(eq(events.seasonId, seasonId))
+      .where(eq(events.seasonId, seasonIdREQ))
       .groupBy(eventResults.teamId, teams.name)
       .orderBy(desc(sum(eventResults.placement)));
+
+    //   const leagueSubquery = db
+    //   .select({ leagueId: seasons.leagueId })
+    //   .from(seasons)
+    //   .where(eq(seasons.id, seasonIdREQ));
+    
+    //   const resultsWith0 = await db
+    //   .select({
+    //     totalPoints: sql`0`,
+    //     teamId: teams.id,
+    //     teamName: teams.name,
+    //   })
+    //   .from(teams)
+    //   .leftJoin(eventResults, eq(teams.id, eventResults.teamId))
+    //   .where(and(
+    //   eq(teams.leagueId, leagueSubquery),
+    //   isNull(eventResults.teamId)
+    // ));
 
     return NextResponse.json(results, { status: 200 });
   } catch (error) {
