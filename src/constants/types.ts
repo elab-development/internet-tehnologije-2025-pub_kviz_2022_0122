@@ -53,7 +53,7 @@ export interface SpecificLeague {
 }
 
 export interface Standing {
-  placement: number;
+  totalPoints: number;
   teamId: number;
   teamName: string;
 }

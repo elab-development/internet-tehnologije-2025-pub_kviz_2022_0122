@@ -132,7 +132,7 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                             {standing.teamName}
                           </td>
                           <td className="py-4 px-4 text-white font-semibold">
-                            {standing.placement}
+                            {standing.totalPoints}
                           </td>
                         </tr>
                       ))}
