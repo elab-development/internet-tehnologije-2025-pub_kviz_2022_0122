@@ -70,6 +70,14 @@ async function main() {
           name: "Maxbet premium partner evrolige",
           leagueId: insertedLeagues[0].id,
         },
+        {
+          name: "Team Priboj",
+          leagueId: insertedLeagues[0].id,
+        },
+        {
+          name: "Team Cacak",
+          leagueId: insertedLeagues[0].id,
+        },
       ])
       .returning();
 
@@ -162,6 +170,7 @@ async function main() {
           location: "Kafana Druga kuća",
           eventDate: new Date("2026-03-08T19:00:00"),
           capacity: 40,
+          price: "500",
         },
         {
           seasonId: insertedSeasons[0].id,
@@ -170,6 +179,7 @@ async function main() {
           location: "Pub Lazino Tele",
           eventDate: new Date("2026-03-22T20:00:00"),
           capacity: 30,
+          price: "800",
         },
         {
           seasonId: insertedSeasons[0].id,
@@ -178,6 +188,25 @@ async function main() {
           location: "Sport Caffe",
           eventDate: new Date("2026-04-05T19:30:00"),
           capacity: 50,
+          price: "600",
+        },
+        {
+          seasonId: insertedSeasons[0].id,
+          name: "Estradni kviz",
+          theme: "Aktuelna muzika i poznate ličnosti",
+          location: "Sport Caffe",
+          eventDate: new Date("2025-04-05T19:30:00"),
+          capacity: 50,
+          price: "650",
+        },
+        {
+          seasonId: insertedSeasons[0].id,
+          name: "Skolski kviz",
+          theme: "Opšte znanje",
+          location: "Sky Caffe",
+          eventDate: new Date("2025-07-05T18:30:00"),
+          capacity: 50,
+          price: "750",
         },
       ])
       .returning();
@@ -188,30 +217,42 @@ async function main() {
       {
         eventId: insertedEvents[0].id,
         teamId: insertedTeams[0].id,
-        price: "1500.00",
       },
       {
         eventId: insertedEvents[0].id,
         teamId: insertedTeams[1].id,
-        price: "1500.00",
       },
       {
         eventId: insertedEvents[1].id,
         teamId: insertedTeams[2].id,
-        price: "1200.00",
       },
     ]);
 
     await tx.insert(eventResults).values([
       {
-        eventId: insertedEvents[0].id,
+        eventId: insertedEvents[3].id,
         teamId: insertedTeams[0].id,
-        placement: 1,
+        placement: 10,
       },
       {
-        eventId: insertedEvents[0].id,
+        eventId: insertedEvents[3].id,
         teamId: insertedTeams[1].id,
-        placement: 2,
+        placement: 9,
+      },
+      {
+        eventId: insertedEvents[4].id,
+        teamId: insertedTeams[1].id,
+        placement: 9,
+      },
+      {
+        eventId: insertedEvents[4].id,
+        teamId: insertedTeams[2].id,
+        placement: 4,
+      },
+      {
+        eventId: insertedEvents[4].id,
+        teamId: insertedTeams[0].id,
+        placement: 7,
       },
     ]);
 

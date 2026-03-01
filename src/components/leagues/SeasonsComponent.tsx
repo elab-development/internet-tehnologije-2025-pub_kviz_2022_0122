@@ -99,6 +99,9 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                         <th className="text-left py-3 px-4 font-bold text-pub-orange">
                           Tim
                         </th>
+                        <th className="text-left py-3 px-4 font-bold text-pub-orange">
+                          Poeni
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -117,18 +120,19 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                                       ? "bg-gray-400"
                                       : index === 2
                                         ? "bg-orange-600"
-                                        : "bg-gray-300"
+                                        : "bg-transparent border border-white/20 text-white"
                                 }`}
                               >
                                 {index + 1}
                               </div>
-                              <span className="font-bold text-white">
-                                {index + 1}.
-                              </span>
+                              
                             </div>
                           </td>
                           <td className="py-4 px-4 text-white font-semibold">
                             {standing.teamName}
+                          </td>
+                          <td className="py-4 px-4 text-white font-semibold">
+                            {standing.placement}
                           </td>
                         </tr>
                       ))}

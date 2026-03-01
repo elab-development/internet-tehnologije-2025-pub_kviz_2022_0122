@@ -13,6 +13,7 @@ type EventItem = {
   location?: string;
   capacity: number;
   theme?: string;
+  price: number;
 };
 
 export default function EventSection() {
@@ -200,10 +201,27 @@ export default function EventSection() {
                         </div>
                       </div>
                     </div>
+
+                    <div className="flex items-center gap-3 text-white/90">
+                      <div>
+                        <div className="text-xs text-white/60">Cena</div>
+                        <div className="font-semibold">
+                          {event.price.toString()} din
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div className="mt-auto flex flex-col gap-4">
                     <Button
-                      onClick={() => router.push(`/events/${event.id}`)}
+                      onClick={async () => {
+                        const response = await fetch(`/api/events/${event.id}?date=${event.date}`, {
+                          method: 'GET',
+                        });
+                        
+                        if (response.ok) {
+                          router.push(`/events/${event.id}`);
+                        }
+                      }}
                       label="Prijavi se →"
                     />
 
