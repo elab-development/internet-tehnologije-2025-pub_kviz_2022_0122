@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { eventResults, teams, events } from "@/db/schema";
 import { NextResponse } from "next/server";
-import { eq, inArray, asc } from "drizzle-orm";
+import { eq, inArray, asc, desc, sum } from "drizzle-orm";
 
 export async function GET(
   req: Request,
@@ -11,27 +11,18 @@ export async function GET(
     const { seasonId: seasonIdStr } = await params;
     const seasonId = parseInt(seasonIdStr);
 
-    const seasonEvents = await db
-      .select({ id: events.id })
-      .from(events)
-      .where(eq(events.seasonId, seasonId));
-
-    const eventIds = seasonEvents.map((event) => event.id);
-
-    if (eventIds.length === 0) {
-      return NextResponse.json([], { status: 200 });
-    }
-
     const results = await db
       .select({
-        placement: eventResults.placement,
+        placement: sum(eventResults.placement),
         teamId: eventResults.teamId,
         teamName: teams.name,
       })
-      .from(eventResults)
-      .innerJoin(teams, eq(eventResults.teamId, teams.id))
-      .where(inArray(eventResults.eventId, eventIds))
-      .orderBy(asc(eventResults.placement));
+      .from(teams)
+      .leftJoin(eventResults, eq(eventResults.teamId, teams.id))
+      .leftJoin(events, eq(eventResults.eventId, events.id))
+      .where(eq(events.seasonId, seasonId))
+      .groupBy(eventResults.teamId, teams.name)
+      .orderBy(desc(sum(eventResults.placement)));
 
     return NextResponse.json(results, { status: 200 });
   } catch (error) {

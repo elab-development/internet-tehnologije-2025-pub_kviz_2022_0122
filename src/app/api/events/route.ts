@@ -20,6 +20,7 @@ async function getAllEvents(): Promise<EventItem[]> {
     date: e.eventDate.toISOString(),
     location: e.location,
     capacity: e.capacity,
+    price: e.price,
   }));
 }
 
