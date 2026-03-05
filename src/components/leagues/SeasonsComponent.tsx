@@ -36,6 +36,16 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
     setSelectedSeason(season);
     fetchStandings(season.id);
   };
+  function getPlacementStyle(place: number) {
+    if (place === 1)
+      return "bg-yellow-500/20 border border-yellow-400 text-yellow-300";
+    if (place === 2)
+      return "bg-gray-400/20 border border-gray-300 text-gray-200";
+    if (place === 3)
+      return "bg-amber-700/20 border border-amber-500 text-amber-400";
+    return "bg-white/10 border border-white/20 text-white";
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       <div className="lg:col-span-1">
@@ -113,19 +123,12 @@ export default function SeasonsComponent({ league }: SeasonsProps) {
                           <td className="py-4 px-4">
                             <div className="flex items-center">
                               <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white mr-3 ${
-                                  index === 0
-                                    ? "bg-yellow-500"
-                                    : index === 1
-                                      ? "bg-gray-400"
-                                      : index === 2
-                                        ? "bg-orange-600"
-                                        : "bg-transparent border border-white/20 text-white"
-                                }`}
+                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm mr-4 ${getPlacementStyle(
+                                  index + 1,
+                                )}`}
                               >
                                 {index + 1}
                               </div>
-                              
                             </div>
                           </td>
                           <td className="py-4 px-4 text-white font-semibold">
