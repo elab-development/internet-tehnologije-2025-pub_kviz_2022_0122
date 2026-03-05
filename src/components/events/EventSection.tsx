@@ -5,41 +5,32 @@ import ButtonLink from "@/components/Button";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import { usePathname, useRouter } from "next/navigation";
+import { EventItem } from "@/constants/types";
 
-type EventItem = {
-  id: string | number;
-  name: string;
-  date: string;
-  location?: string;
-  capacity: number;
-  theme?: string;
-  price: number;
-};
-
-export default function EventSection() {
-  const [events, setEvents] = useState<EventItem[]>([]);
+export default function EventSection({
+  allEvents,
+}: {
+  allEvents?: EventItem[];
+}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [upcoming, setUpcoming] = useState<EventItem[]>([]);
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    let mounted = true;
-    fetch("/api/events")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to load events");
-        return res.json();
-      })
-      .then((data) => {
-        if (mounted)
-          setEvents(Array.isArray(data) ? data : (data?.events ?? []));
-      })
-      .catch((e) => mounted && setError(e.message))
-      .finally(() => mounted && setLoading(false));
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    if (allEvents) {
+      const now = new Date();
+      const upcomingEvents = allEvents.filter(
+        (e: EventItem) => new Date(e.date).getTime() >= now.getTime(),
+      );
+      setUpcoming(upcomingEvents);
+      setLoading(false);
+    } else {
+      setError("Nije moguće učitati događaje");
+      setLoading(false);
+    }
+  }, [allEvents]);
 
   const { user } = useAuth();
 
@@ -76,28 +67,6 @@ export default function EventSection() {
     ];
     return months[d.getMonth()];
   };
-  const handleDelete = async (id: string | number) => {
-    const confirmDelete = confirm(
-      "Da li ste sigurni da želite da obrišete događaj?",
-    );
-    if (!confirmDelete) return;
-
-    try {
-      const res = await fetch(`/api/events?id=${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Greška pri brisanju");
-      }
-
-      setEvents((prev) => prev.filter((e) => e.id !== id));
-    } catch (err: any) {
-      alert(err.message);
-    }
-  };
 
   if (loading) {
     return (
@@ -133,7 +102,7 @@ export default function EventSection() {
           </p>
         </div>
 
-        {events.length === 0 ? (
+        {upcoming.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">📅</div>
             <p className="text-xl text-white/70">
@@ -142,7 +111,7 @@ export default function EventSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {events.map((event) => (
+            {upcoming.map((event) => (
               <div
                 key={event.id}
                 className="group relative bg-white/10 backdrop-blur-sm border-2 border-pub-gray/50 rounded-2xl overflow-hidden 
@@ -167,7 +136,6 @@ export default function EventSection() {
                   <div className="space-y-3 mb-6">
                     {event.theme && (
                       <div className="flex items-center gap-3 text-white/90">
-                        <span className="text-pub-orange text-xl">🎯</span>
                         <div>
                           <div className="text-xs text-white/60">Tema</div>
                           <div className="font-semibold">{event.theme}</div>
@@ -214,23 +182,19 @@ export default function EventSection() {
                   <div className="mt-auto flex flex-col gap-4">
                     <Button
                       onClick={async () => {
-                        const response = await fetch(`/api/events/${event.id}?date=${event.date}`, {
-                          method: 'GET',
-                        });
-                        
+                        const response = await fetch(
+                          `/api/events/${event.id}?date=${event.date}`,
+                          {
+                            method: "GET",
+                          },
+                        );
+
                         if (response.ok) {
                           router.push(`/events/${event.id}`);
                         }
                       }}
                       label="Prijavi se →"
                     />
-
-                    {(user?.role === "ADMIN" || user?.role === "ORGANIZER") && (
-                      <Button
-                        onClick={() => handleDelete(event.id)}
-                        label="Obriši događaj"
-                      />
-                    )}
                   </div>
                 </div>
               </div>
@@ -238,7 +202,7 @@ export default function EventSection() {
           </div>
         )}
 
-        {events.length > 0 && pathname !== "/events" && (
+        {upcoming.length > 0 && pathname !== "/events" && (
           <div className="text-center mt-12">
             <ButtonLink
               onClick={() => router.push("/events")}

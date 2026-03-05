@@ -9,11 +9,11 @@ export default function SpecificLeagueComponent({ league }: Props) {
         <div>
           <h1 className="text-5xl font-bold text-white mb-2">{league.name}</h1>
           <p className="text-white/80">
-            {league.seasons.length} sezona dostupno
+            <span className="mr-4">Sezona dostupno</span>
+            <span className="font-bold border border-pub-orange px-2 py-1 rounded-full text-pub-orange">
+              {league.seasons.length}
+            </span>
           </p>
-        </div>
-        <div className="w-20 h-20 bg-linear-to-br from-pub-orange to-orange-400 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-          {league.name.charAt(0)}
         </div>
       </div>
     </div>

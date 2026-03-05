@@ -5,6 +5,13 @@ export type TeamMember = {
   role: string;
 };
 
+export type TeamPlacement = {
+  teamId: number;
+  teamName: string;
+  registrationDate?: string;
+  placement?: number;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -57,3 +64,13 @@ export interface Standing {
   teamId: number;
   teamName: string;
 }
+
+export type EventItem = {
+  id: string | number;
+  name: string;
+  date: string;
+  location?: string;
+  capacity: number;
+  theme?: string;
+  price: number;
+};

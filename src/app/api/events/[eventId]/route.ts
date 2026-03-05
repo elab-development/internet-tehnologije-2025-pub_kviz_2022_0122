@@ -1,30 +1,35 @@
-import { db } from '@/db';
-import { eventRegistrations, eventResults, events, teams } from '@/db/schema';
-import { and, desc, eq, gt, gte, lt, sql } from 'drizzle-orm';
-import { NextResponse } from 'next/server';
+import { db } from "@/db";
+import { eventRegistrations, eventResults, events, teams } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
+import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ eventId: string }> }
+  { params }: { params: Promise<{ eventId: string }> },
 ) {
-
   try {
-
-    const {eventId: eventStr} = await params;
+    const { eventId: eventStr } = await params;
     const eventId = parseInt(eventStr);
 
-    const { searchParams } = new URL(request.url);
-    const dateStr = searchParams.get('date');
-    const date = dateStr ? new Date(dateStr) : null;
-    // console.log("date:", date);
+    const event = await db
+      .select()
+      .from(events)
+      .where(eq(events.id, eventId))
+      .limit(1);
 
-    if(!date) {
-      return NextResponse.json({ error: "Datum nije prosleđen" }, { status: 400 });
+    if (!event.length) {
+      return NextResponse.json(
+        { error: "Event nije pronađen" },
+        { status: 404 },
+      );
     }
-    
-    if(date >= new Date()) {
-      //vracanje prijavljenih timova za nadolazeći event
-      const result = await db
+
+    const eventDate = new Date(event[0].eventDate);
+    const now = new Date();
+    if (eventDate >= now) {
+      const teamsData = await db
         .select({
           teamId: teams.id,
           teamName: teams.name,
@@ -32,16 +37,14 @@ export async function GET(
         })
         .from(eventRegistrations)
         .innerJoin(teams, eq(eventRegistrations.teamId, teams.id))
-        .innerJoin(events, eq(eventRegistrations.eventId, events.id))
-        .where(and(eq(eventRegistrations.eventId, eventId), gte(events.eventDate, sql`CURRENT_DATE`)));
+        .where(eq(eventRegistrations.eventId, eventId));
 
-      if (!result || result.length === 0) {
-        return NextResponse.json({ error: "Event nije pronađen" }, { status: 404 });
-      }
-      return NextResponse.json(result, { status: 200 });
-    }else{
-      //vracanje rezultata za prosli event
-      const result = await db
+      return NextResponse.json({
+        status: "UPCOMING",
+        teams: teamsData,
+      });
+    } else {
+      const results = await db
         .select({
           teamId: teams.id,
           teamName: teams.name,
@@ -49,20 +52,86 @@ export async function GET(
         })
         .from(eventResults)
         .innerJoin(teams, eq(eventResults.teamId, teams.id))
-        .innerJoin(events, eq(eventResults.eventId, events.id))
-        .where(and(eq(eventResults.eventId, eventId), lt(events.eventDate, sql`CURRENT_DATE`)))
-        .orderBy(desc(eventResults.placement));
+        .where(eq(eventResults.eventId, eventId))
+        .orderBy(eventResults.placement);
 
-      if (!result || result.length === 0) {
-        return NextResponse.json({ error: "Event nije pronađen" }, { status: 404 });
-      }
-      return NextResponse.json(result, { status: 200 });
+      return NextResponse.json({
+        status: "FINISHED",
+        results,
+      });
     }
-      
-    
   } catch (error) {
     console.error("Error fetching event details:", error);
-    return NextResponse.json({ error: "Greška pri dohvatanju detalja događaja" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Greška pri dohvatanju detalja događaja" },
+      { status: 500 },
+    );
   }
+}
 
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ eventId: string }> },
+) {
+  try {
+    const { eventId: eventStr } = await params;
+    const eventId = parseInt(eventStr);
+
+    // Proveravamo autentifikaciju
+    const cookieStore = await cookies();
+    const token = cookieStore.get(AUTH_COOKIE)?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { error: "Niste autentifikovani" },
+        { status: 401 },
+      );
+    }
+
+    const payload = verifyAuthToken(token);
+    if (!payload) {
+      return NextResponse.json({ error: "Nevažeći token" }, { status: 401 });
+    }
+
+    // Provera da li je korisnik ADMIN ili ORGANIZER
+    if (payload.role !== "ADMIN" && payload.role !== "ORGANIZER") {
+      return NextResponse.json(
+        { error: "Samo administratori i organizatori mogu obrisati događaj" },
+        { status: 403 },
+      );
+    }
+
+    // Provera da li događaj postoji
+    const event = await db
+      .select()
+      .from(events)
+      .where(eq(events.id, eventId))
+      .limit(1);
+
+    if (!event.length) {
+      return NextResponse.json(
+        { error: "Event nije pronađen" },
+        { status: 404 },
+      );
+    }
+
+    await db
+      .delete(eventRegistrations)
+      .where(eq(eventRegistrations.eventId, eventId));
+
+    await db.delete(eventResults).where(eq(eventResults.eventId, eventId));
+
+    await db.delete(events).where(eq(events.id, eventId));
+
+    return NextResponse.json(
+      { message: "Događaj je uspešno obrisan" },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return NextResponse.json(
+      { error: "Greška pri brisanju događaja" },
+      { status: 500 },
+    );
+  }
 }
