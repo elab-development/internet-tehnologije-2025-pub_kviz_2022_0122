@@ -133,7 +133,7 @@ export default function PastEventDetails({
                         : 0,
                     })
                   }
-                  placeholder="Mesto"
+                  placeholder="Broj bodova"
                   className="bg-white/20 border border-white/30 rounded px-4 py-2 text-white placeholder-white/50 w-24"
                 />
               </div>
@@ -157,7 +157,7 @@ export default function PastEventDetails({
           {teams.length > 0 ? (
             <div className="space-y-4">
               {sortedTeams.map((team, index) => {
-                const place = team.placement || index + 1;
+                const place = index + 1;
                 return (
                   <div
                     key={team.teamId}
@@ -174,11 +174,11 @@ export default function PastEventDetails({
                           {team.teamName}
                         </p>
                       </div>
-                      <div className="text-right">
-                        <p className="text-white/60 text-sm">MESTO</p>
-                        <p className="text-2xl font-bold text-pub-orange">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white/60 text-sm">BROJ BODOVA:</span>
+                        <span className="text-2xl font-bold text-pub-orange tabular-nums min-w-[40px] text-right">
                           {team.placement || "-"}
-                        </p>
+                        </span>
                       </div>
                     </div>
                   </div>

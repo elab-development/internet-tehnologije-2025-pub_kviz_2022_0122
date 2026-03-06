@@ -4,6 +4,7 @@ import type { EventItem } from "@/constants/types";
 import Button from "@/components/Button";
 import { useAuth } from "@/components/AuthProvider";
 import { useRouter } from "next/navigation";
+import { useCurrency } from "../CurrencyProvider";
 
 interface EventHeaderProps {
   event: EventItem;
@@ -54,6 +55,8 @@ export default function EventHeader({
     }
   };
 
+  const { currency, rates } = useCurrency();
+
   return (
     <div className="bg-linear-to-r from-pub-orange/20 to-orange-500/10 rounded-2xl p-8 mb-8 border border-pub-orange/30">
       <div className="flex items-start justify-between gap-6 mb-6">
@@ -79,7 +82,15 @@ export default function EventHeader({
         </div>
         <div>
           <p className="text-white/60 text-sm font-semibold mb-1">CENA</p>
-          <p className="text-lg text-white">{event.price} RSD</p>
+          <p className="text-lg text-white">
+            {rates[currency] 
+              ? (Number(event.price) * rates[currency]).toLocaleString(undefined, {
+                  minimumFractionDigits: currency === "RSD" ? 0 : 2,
+                  maximumFractionDigits: 2,
+                })
+              : "..."
+            } {currency}
+          </p>
         </div>
         {(user?.role === "ADMIN" || user?.role === "ORGANIZER") && (
           <Button

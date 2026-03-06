@@ -46,18 +46,21 @@ export const TeamSection: React.FC = () => {
   }, [user?.id, status]);
 
   return (
-    <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-white/10 p-6 mt-8 w-full rounded-xl">
-      <h2 className="mb-4 xl:text-4xl text-2xl font-semibold">
+    <div className="border shadow-xl flex flex-col items-center justify-center shadow-white/20 border-pub-orange bg-gradient-to-br from-white/10 to-white/5 p-8 mt-8 w-full rounded-xl">
+      <h2 className="mb-6 xl:text-4xl text-2xl font-bold text-center">
         Želiš da učestvuješ u kvizu?
       </h2>
 
       {teamData ? (
-        <div className="flex items-center justify-between">
-          <div className="px-4">
-            <p className="text-sm text-neutral-500">
+        <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6">
+          <div className="flex-1 text-center md:text-left">
+            <p className="text-white/60 text-sm mb-2">
               Pogledaj detalje o svom timu i prati kako napredujete u kvizovima.
             </p>
-            <p className="text-xl font-medium">Vaš tim: {teamData?.name}</p>
+            <p className="text-2xl font-semibold">
+              <span className="text-white/70">Vaš tim:</span>{" "}
+              <span className="text-pub-orange">{teamData?.name}</span>
+            </p>
           </div>
 
           <Button
@@ -68,8 +71,8 @@ export const TeamSection: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-between">
-          <p className="text-white m-4">
+        <div className="flex flex-col items-center justify-center text-center">
+          <p className="text-white/80 mb-6 max-w-md">
             Još nisi deo nijednog tima. Pridruži se sada i počni da učestvuješ u
             kvizovima sa prijateljima!
           </p>
