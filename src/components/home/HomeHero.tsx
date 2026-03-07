@@ -13,9 +13,7 @@ export default function HomeHero() {
       <div className="xl:container mx-auto self-center h-full flex items-center justify-center">
         <div className="relative z-10 flex flex-col gap-10 h-full items-center justify-center text-white">
           <h1
-            className="text-4xl md:text-7xl font-extrabold text-center pt-12 
-               bg-linear-to-r from-white via-pub-orange to-white
-               bg-clip-text text-transparent"
+            className="text-4xl md:text-7xl font-extrabold text-center pt-12 bg-linear-to-r from-white via-pub-orange to-white bg-clip-text text-transparent"
           >
             Dobrodošli na Pub Quiz
           </h1>

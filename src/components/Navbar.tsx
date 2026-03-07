@@ -6,6 +6,7 @@ import { menuItems, getHref } from "@/constants/menuItems";
 import Logo from "@/components/Logo";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import CurrencySelect from "./CurrencySelect";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,7 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
+            <CurrencySelect />
           </ul>
           <div className="md:hidden">
             <button
@@ -74,6 +76,7 @@ export default function Navbar() {
                 </button>
               </li>
             ))}
+            <CurrencySelect />
           </ul>
         </div>
       )}

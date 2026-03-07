@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "@/app/globals.css";
 import ConditionalLayout from "@/components/ConditionalLayout";
 import { AuthProvider } from "@/components/AuthProvider";
+import { CurrencyProvider } from "@/components/CurrencyProvider";
 
 const geistSans = Poppins({
   subsets: ["latin"],
@@ -30,7 +31,9 @@ export default function RootLayout({
           }}
         />
         <AuthProvider>
-          <ConditionalLayout>{children}</ConditionalLayout>
+          <CurrencyProvider>
+            <ConditionalLayout>{children}</ConditionalLayout>
+          </CurrencyProvider>
         </AuthProvider>
       </body>
     </html>
