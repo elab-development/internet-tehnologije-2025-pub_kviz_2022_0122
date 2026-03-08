@@ -33,4 +33,4 @@ COPY --from=builder /app/node_modules ./node_modules
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD sh -c "npx drizzle-kit push && node dist/seed.cjs || true && node server.js"
