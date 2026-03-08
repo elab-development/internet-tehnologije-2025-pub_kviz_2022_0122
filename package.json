@@ -17,6 +17,8 @@
   "dependencies": {
     "@remixicon/react": "^4.9.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-react": "^5.18.0",
     "@vitejs/plugin-react": "^5.1.4",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.1",
@@ -29,6 +31,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.8.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-react": "^5.32.0",
     "tsx": "^4.21.0",
     "vitest": "^4.0.18",
     "zod": "^4.3.6"

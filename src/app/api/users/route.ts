@@ -5,6 +5,46 @@ import { users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     tags: [Users]
+ *     summary: Dohvati korisnike
+ *     description: Vraća listu svih korisnika ili pojedinačnog korisnika po ID-u
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID korisnika (opciono)
+ *         required: false
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista korisnika ili pojedinačni korisnik
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 - $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Korisnik ne postoji
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(req: NextRequest) {
   try {
     const cookieStore = await cookies();

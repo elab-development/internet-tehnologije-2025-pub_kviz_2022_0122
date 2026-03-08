@@ -3,6 +3,34 @@ import { leagues, seasons } from "@/db/schema";
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 
+/**
+ * @swagger
+ * /leagues/{leagueId}:
+ *   get:
+ *     tags: [Leagues]
+ *     summary: Dohvati ligu sa sezonama
+ *     description: Vraća detalje o ligi uključujući sve sezone
+ *     parameters:
+ *       - name: leagueId
+ *         in: path
+ *         description: ID lige
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Detalji lige
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LeagueWithSeasons'
+ *       404:
+ *         description: Liga nije pronađena
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ leagueId: string }> },

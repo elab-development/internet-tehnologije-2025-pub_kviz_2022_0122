@@ -5,6 +5,66 @@ import { NextResponse } from "next/server";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
+/**
+ * @swagger
+ * /events/{eventId}/results:
+ *   put:
+ *     tags: [Events]
+ *     summary: Ažuriraj rezultate događaja
+ *     description: Ažurira rezultate timova za određeni događaj (samo admin/organizator)
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         description: ID događaja
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [results]
+ *             properties:
+ *               results:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     eventId:
+ *                       type: integer
+ *                     teamId:
+ *                       type: integer
+ *                     points:
+ *                       type: integer
+ *     responses:
+ *       200:
+ *         description: Rezultati uspešno ažurirani
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo administratori mogu ažurirati rezultate
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ eventId: string }> },

@@ -12,6 +12,33 @@ const registerSchema = z.object({
     password: z.string().min(6, "Lozinka mora imati najmanje 6 karaktera"),
 });
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Registracija novog korisnika
+ *     description: Kreira novog korisnika i vraća JWT token u cookie
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterRequest'
+ *     responses:
+ *       200:
+ *         description: Uspešna registracija
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
+ *       400:
+ *         description: Neispravni podaci ili email već postoji
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(req: Request) {
     const body = await req.json();
     const result = registerSchema.safeParse(body);

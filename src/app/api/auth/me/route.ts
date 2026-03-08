@@ -7,6 +7,35 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Dohvati trenutnog korisnika
+ *     description: Vraća informacije o trenutno ulogovanom korisniku
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Podaci o korisniku
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: "null"
+ */
 export async function GET() {
   const token = (await cookies()).get(AUTH_COOKIE)?.value;
 

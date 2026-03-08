@@ -14,6 +14,166 @@ async function isCaptain(userId: number, teamId: number): Promise<boolean> {
   return user.length > 0 && user[0].captain === true;
 }
 
+/**
+ * @swagger
+ * /join:
+ *   get:
+ *     tags: [Join Requests]
+ *     summary: Dohvati zahteve za pridruživanje
+ *     description: Vraća listu zahteva za pridruživanje timu
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID tima (opciono)
+ *         required: false
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista zahteva
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/JoinRequest'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   post:
+ *     tags: [Join Requests]
+ *     summary: Pošalji zahtev za pridruživanje
+ *     description: Šalje zahtev za pridruživanje timu
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID tima
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Zahtev uspešno poslat
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Zahtev poslat
+ *       400:
+ *         description: ID tima nije pronađen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   patch:
+ *     tags: [Join Requests]
+ *     summary: Prihvati zahtev za pridruživanje
+ *     description: Kapiten tima prihvata zahtev korisnika za pridruživanje
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [userId, teamId]
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 description: ID korisnika
+ *               teamId:
+ *                 type: integer
+ *                 description: ID tima
+ *     responses:
+ *       200:
+ *         description: Korisnik dodat u tim
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Korisnik dodat u tim
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo kapiten tima može dodati članove
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     tags: [Join Requests]
+ *     summary: Odbij zahtev za pridruživanje
+ *     description: Kapiten tima odbija zahtev korisnika za pridruživanje
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [userReqId, teamReqId]
+ *             properties:
+ *               userReqId:
+ *                 type: integer
+ *                 description: ID korisnika
+ *               teamReqId:
+ *                 type: integer
+ *                 description: ID tima
+ *     responses:
+ *       200:
+ *         description: Zahtev odbijen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Zahtev odbijen
+ *       400:
+ *         description: User ID nije pronađen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo kapiten tima može odbiti zahtev
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(req: Request) {
   const token = (await cookies()).get(AUTH_COOKIE)?.value;
 

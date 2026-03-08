@@ -5,6 +5,46 @@ import { teams, users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
+/**
+ * @swagger
+ * /team:
+ *   get:
+ *     tags: [Teams]
+ *     summary: Dohvati timove
+ *     description: Vraća listu svih timova ili pojedinačni tim po ID-u
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID tima (opciono)
+ *         required: false
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista timova ili pojedinačni tim
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Team'
+ *                 - $ref: '#/components/schemas/Team'
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Tim nije pronađen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(req: NextRequest) {
   try {
     const cookieStore = await cookies();
