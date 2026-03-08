@@ -19,29 +19,29 @@ export default function EventSection({
   const pathname = usePathname();
   const router = useRouter();
 
-//   useEffect(() => {
-//   const fetchRates = async () => {
-//     try {
-//       const res = await fetch("https://api.exchangerate-api.com/v4/latest/RSD");
-//       const data = await res.json();
-      
-//       const filteredRates = {
-//         RSD: 1,
-//         EUR: data.rates.EUR,
-//         USD: data.rates.USD,
-//         CHF: data.rates.CHF,
-//         GBP: data.rates.GBP,
-//       };
-      
-//       setRates(filteredRates);
-//     } catch (err) {
-//       console.error("Greška pri učitavanju kursne liste:", err);
-//       setRates({ RSD: 1 });
-//     }
-//   };
+  //   useEffect(() => {
+  //   const fetchRates = async () => {
+  //     try {
+  //       const res = await fetch("https://api.exchangerate-api.com/v4/latest/RSD");
+  //       const data = await res.json();
 
-//   fetchRates();
-// }, []);
+  //       const filteredRates = {
+  //         RSD: 1,
+  //         EUR: data.rates.EUR,
+  //         USD: data.rates.USD,
+  //         CHF: data.rates.CHF,
+  //         GBP: data.rates.GBP,
+  //       };
+
+  //       setRates(filteredRates);
+  //     } catch (err) {
+  //       console.error("Greška pri učitavanju kursne liste:", err);
+  //       setRates({ RSD: 1 });
+  //     }
+  //   };
+
+  //   fetchRates();
+  // }, []);
 
   useEffect(() => {
     if (allEvents) {
@@ -115,7 +115,6 @@ export default function EventSection({
       </section>
     );
   }
-  
 
   return (
     <section className="py-20 bg-transparent text-white z-10 relative">
@@ -199,18 +198,25 @@ export default function EventSection({
 
                     <div className="flex items-center gap-3 text-white/90">
                       <div className="w-full">
-                        <div className="text-xs text-white/60 mb-1">Cena i Valuta</div>
+                        <div className="text-xs text-white/60 mb-1">
+                          Cena i Valuta
+                        </div>
                         <div className="flex items-center gap-3 text-white/90">
                           <div className="w-full">
-                            <div className="text-xs text-white/60 mb-1">Cena</div>
+                            <div className="text-xs text-white/60 mb-1">
+                              Cena
+                            </div>
                             <div className="font-semibold text-pub-orange text-xl">
-                                {rates[currency] 
-                                  ? (Number(event.price) * rates[currency]).toLocaleString(undefined, {
-                                      minimumFractionDigits: currency === "RSD" ? 0 : 2,
-                                      maximumFractionDigits: 2,
-                                    })
-                                  : "..."
-                                } {currency}
+                              {rates[currency]
+                                ? (
+                                    Number(event.price) * rates[currency]
+                                  ).toLocaleString(undefined, {
+                                    minimumFractionDigits:
+                                      currency === "RSD" ? 0 : 2,
+                                    maximumFractionDigits: 2,
+                                  })
+                                : "..."}{" "}
+                              {currency}
                             </div>
                           </div>
                         </div>
