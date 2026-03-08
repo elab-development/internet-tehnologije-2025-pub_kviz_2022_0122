@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { menuItems } from "../constants/menuItems";
-import Logo from "./Logo";
+import { menuItems, getHref } from "@/constants/menuItems";
+import Logo from "@/components/Logo";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
+import CurrencySelect from "./CurrencySelect";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { user } = useAuth();
+  const router = useRouter();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -18,20 +22,21 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-full">
           <div className="shrink-0 mr-12">
             <Link href="/" className="text-2xl font-bold">
-              <Logo width={75} height={75} src="/logo-beli-pubquiz.png" />
+              <Logo width={75} height={75} src="/logos/logo-beli-pubquiz.png" />
             </Link>
           </div>
           <ul className="hidden md:flex space-x-15 text-md">
             {menuItems.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={getHref(item.href, user)}
                   className="inline-block text-white font-semibold hover:text-pub-beige hover:scale-110 transition-transform duration-500"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
+            <CurrencySelect />
           </ul>
           <div className="md:hidden">
             <button
@@ -56,18 +61,22 @@ export default function Navbar() {
         </div>
       </div>
       {isOpen && (
-        <div className="md:hidden bg-transparent">
+        <div className="md:hidden bg-white/70 backdrop-blur-sm border-t border-pub-blue/50">
           <ul className="px-2 pt-2 pb-3 space-y-1 text-lg">
             {menuItems.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block px-3 py-2 border-gray-700 border-b-2  hover:bg-slate-600"
+                <button
+                  onClick={async () => {
+                    router.push(getHref(item.href, user));
+                    setIsOpen(false);
+                  }}
+                  className="block px-3 py-2 text-pub-blue font-semibold w-full text-left cursor-pointer border-pub-blue border-b  hover:bg-pub-blue/20 rounded transition-all duration-1000"
                 >
                   {item.label}
-                </Link>
+                </button>
               </li>
             ))}
+            <CurrencySelect />
           </ul>
         </div>
       )}

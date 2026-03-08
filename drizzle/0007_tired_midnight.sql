@@ -1,0 +1,1 @@
+ALTER TABLE "event_results" RENAME COLUMN "placement" TO "points";

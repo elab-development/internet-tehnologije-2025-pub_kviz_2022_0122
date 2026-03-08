@@ -1,29 +1,38 @@
-import TeamSection from "../components/TeamSection";
+"use client";
+import EventSection from "@/components/events/EventSection";
+import HomeHero from "@/components/home/HomeHero";
+import HowItWorksSection from "@/components/home/HowToCompete";
+import { useEffect, useState } from "react";
+import type { EventItem } from "@/constants/types";
 
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/events")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load events");
+        return res.json();
+      })
+      .then((data) => {
+        if (mounted) {
+          const allEvents = Array.isArray(data) ? data : (data?.events ?? []);
+          setEvents(allEvents);
+        }
+      })
+      .catch((e) => mounted && setError(e.message))
+      .finally(() => mounted && setLoading(false));
+    return () => {
+      mounted = false;
+    };
+  }, []);
   return (
     <>
-      {" "}
-      <div className="relative h-screen">
-        <img
-          src="/images/home/pub-hero.jpeg"
-          alt="Pub Hero Image"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-
-        <div className="absolute inset-0 bg-black/70"></div>
-        <div className="xl:container mx-auto self-center h-full flex items-center justify-center">
-          <div className="relative z-10 flex flex-col gap-10 h-full items-center justify-center text-white">
-            <h1 className="text-4xl md:text-7xl font-extrabold text-center px-4">
-              Dobrodošli na PubQuiz
-            </h1>
-            <h2 className="mt-4 text-xl md:text-2xl font-medium text-center px-4">
-              Testirajte svoje znanje i zabavite se sa prijateljima!
-            </h2>
-            <TeamSection team={null} />
-          </div>
-        </div>
-      </div>
+      <HomeHero />
+      <EventSection allEvents={events} />
+      <HowItWorksSection />
     </>
   );
 }

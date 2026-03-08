@@ -1,0 +1,1 @@
+-- ALTER TABLE "team_join_requests" DROP COLUMN "id";

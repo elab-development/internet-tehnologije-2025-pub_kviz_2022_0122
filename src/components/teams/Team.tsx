@@ -1,0 +1,69 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import type { TeamResponse } from "@/constants/types";
+import TeamMembers from "@/components/teams/TeamMembers";
+import TeamJoinRequest from "@/components/teams/TeamJoinRequest";
+import AllTeams from "@/components/teams/AllTeams";
+import MyTeam from "@/components/teams/MyTeam";
+import TeamStats from "@/components/teams/TeamStats";
+
+export default function Team({ teamId }: { teamId: string }) {
+  const { user, status, refresh } = useAuth();
+  const [teamData, setTeamData] = useState<TeamResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !user) {
+      refresh();
+      return;
+    }
+    const fetchTeamData = async () => {
+      try {
+        const response = await fetch(`/api/team?id=${teamId}`, {
+          credentials: "include",
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setTeamData(data);
+        }
+      } catch (err) {
+        console.error("Greška pri dohvatanju tima:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeamData();
+  }, [teamId, status]);
+
+  if (status === "loading" || (loading && status === "authenticated")) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-xl font-bold text-pub-orange">
+          Učitavanje profila i tima...
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen px-4 py-10 mt-20">
+      <div className="container mx-auto max-w-7xl space-y-8">
+        <MyTeam teamData={teamData} />
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          <TeamMembers teamData={teamData} />
+          <TeamJoinRequest teamData={teamData} />
+        </div>
+
+        {teamData?.id && <TeamStats teamId={teamData.id} />}
+
+        <AllTeams />
+      </div>
+    </div>
+  );
+}
