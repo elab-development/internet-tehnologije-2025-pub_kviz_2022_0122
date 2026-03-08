@@ -100,6 +100,7 @@ export default function LoginForm() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               required
               value={email}
@@ -117,6 +118,7 @@ export default function LoginForm() {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
               required
               value={password}

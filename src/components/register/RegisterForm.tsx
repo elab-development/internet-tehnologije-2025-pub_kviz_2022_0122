@@ -70,6 +70,7 @@ export default function RegisterForm() {
               </label>
               <input
                 id={field.id}
+                name={field.id}
                 type={field.type}
                 required
                 value={field.value}
