@@ -7,6 +7,7 @@ import TeamMembers from "@/components/teams/TeamMembers";
 import TeamJoinRequest from "@/components/teams/TeamJoinRequest";
 import AllTeams from "@/components/teams/AllTeams";
 import MyTeam from "@/components/teams/MyTeam";
+import TeamStats from "@/components/teams/TeamStats";
 
 export default function Team({ teamId }: { teamId: string }) {
   const { user, status, refresh } = useAuth();
@@ -54,11 +55,14 @@ export default function Team({ teamId }: { teamId: string }) {
       <div className="container mx-auto max-w-7xl space-y-8">
         <MyTeam teamData={teamData} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           <TeamMembers teamData={teamData} />
           <TeamJoinRequest teamData={teamData} />
-          <AllTeams />
         </div>
+
+        {teamData?.id && <TeamStats teamId={teamData.id} />}
+
+        <AllTeams />
       </div>
     </div>
   );

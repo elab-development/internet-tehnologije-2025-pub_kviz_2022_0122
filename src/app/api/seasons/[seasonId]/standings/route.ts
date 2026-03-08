@@ -13,7 +13,7 @@ export async function GET(
 
     const results = await db
       .select({
-        totalPoints: sum(eventResults.placement),
+        totalPoints: sum(eventResults.points),
         teamId: eventResults.teamId,
         teamName: teams.name,
       })
@@ -22,7 +22,7 @@ export async function GET(
       .leftJoin(events, eq(eventResults.eventId, events.id))
       .where(eq(events.seasonId, seasonIdREQ))
       .groupBy(eventResults.teamId, teams.name)
-      .orderBy(desc(sum(eventResults.placement)));
+      .orderBy(desc(sum(eventResults.points)));
 
     //   const leagueSubquery = db
     //   .select({ leagueId: seasons.leagueId })

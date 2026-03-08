@@ -47,7 +47,7 @@ export async function PUT(
       await db.insert(eventResults).values({
         eventId: result.eventId,
         teamId: result.teamId,
-        placement: result.placement,
+        points: result.points,
       });
     }
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { EventItem } from "@/constants/types";
-import type { TeamPlacement } from "@/constants/types";
+import type { TeamPoints } from "@/constants/types";
 import EventHeader from "@/components/events/EventHeader";
 import UpcomingEventSection from "@/components/events/UpcomingEventSection";
 import PastEventDetails from "@/components/events/PastEventDetails";
@@ -16,7 +16,7 @@ export default function SpecificEventPage({
   eventId,
   event,
 }: SpecificEventPageProps) {
-  const [teams, setTeams] = useState<TeamPlacement[]>([]);
+  const [teams, setTeams] = useState<TeamPoints[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpcoming, setIsUpcoming] = useState(false);
