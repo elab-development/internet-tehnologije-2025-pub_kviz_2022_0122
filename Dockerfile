@@ -30,6 +30,9 @@ COPY --from=builder /app/dist/seed.cjs ./dist/seed.cjs
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
 EXPOSE 3000
 
 CMD ["node", "server.js"]
