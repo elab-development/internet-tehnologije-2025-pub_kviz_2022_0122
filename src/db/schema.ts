@@ -88,7 +88,7 @@ export const eventResults = pgTable("event_results", {
   teamId: integer("team_id")
     .notNull()
     .references(() => teams.id),
-  placement: integer("placement").notNull(),
+  points: integer("points").notNull(),
 });
 
 export const teamJoinRequests = pgTable(

@@ -3,12 +3,12 @@
 import { useState } from "react";
 import Button from "@/components/Button";
 import { useAuth } from "@/components/AuthProvider";
-import type { TeamPlacement } from "@/constants/types";
+import type { TeamPoints } from "@/constants/types";
 
 interface UpcomingEventSectionProps {
   eventId: string;
-  teams: TeamPlacement[];
-  onTeamsUpdated: (teams: TeamPlacement[]) => void;
+  teams: TeamPoints[];
+  onTeamsUpdated: (teams: TeamPoints[]) => void;
 }
 
 export default function UpcomingEventSection({

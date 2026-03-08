@@ -163,6 +163,7 @@ async function main() {
     const insertedEvents = await tx
       .insert(events)
       .values([
+        // Proleće 2026 events (current season)
         {
           seasonId: insertedSeasons[0].id,
           name: "Novogodišnje zagrevanje",
@@ -195,7 +196,7 @@ async function main() {
           name: "Estradni kviz",
           theme: "Aktuelna muzika i poznate ličnosti",
           location: "Sport Caffe",
-          eventDate: new Date("2025-04-05T19:30:00"),
+          eventDate: new Date("2026-02-15T19:30:00"),
           capacity: 50,
           price: "650",
         },
@@ -204,9 +205,55 @@ async function main() {
           name: "Skolski kviz",
           theme: "Opšte znanje",
           location: "Sky Caffe",
-          eventDate: new Date("2025-07-05T18:30:00"),
+          eventDate: new Date("2026-02-22T18:30:00"),
           capacity: 50,
           price: "750",
+        },
+        // Zima 2025 events (past season)
+        {
+          seasonId: insertedSeasons[1].id,
+          name: "Zimski početak",
+          theme: "Opšte znanje",
+          location: "Kafana Druga kuća",
+          eventDate: new Date("2025-11-08T19:00:00"),
+          capacity: 40,
+          price: "450",
+        },
+        {
+          seasonId: insertedSeasons[1].id,
+          name: "Muzički izazov",
+          theme: "Rok i pop muzika 80-ih i 90-ih",
+          location: "Pub Lazino Tele",
+          eventDate: new Date("2025-11-22T20:00:00"),
+          capacity: 35,
+          price: "500",
+        },
+        {
+          seasonId: insertedSeasons[1].id,
+          name: "Naučna fantastika",
+          theme: "Sci-fi filmovi i serije",
+          location: "Cinema Caffe",
+          eventDate: new Date("2025-12-06T19:30:00"),
+          capacity: 45,
+          price: "550",
+        },
+        {
+          seasonId: insertedSeasons[1].id,
+          name: "Istorijski maraton",
+          theme: "Svetska istorija",
+          location: "Sport Caffe",
+          eventDate: new Date("2025-12-13T19:00:00"),
+          capacity: 50,
+          price: "600",
+        },
+        {
+          seasonId: insertedSeasons[1].id,
+          name: "Novogodišnji finale",
+          theme: "Miks kategorija",
+          location: "Grand Hall",
+          eventDate: new Date("2025-12-28T20:00:00"),
+          capacity: 60,
+          price: "800",
         },
       ])
       .returning();
@@ -229,30 +276,147 @@ async function main() {
     ]);
 
     await tx.insert(eventResults).values([
+      // Proleće 2026 results (Estradni kviz - event index 3)
       {
         eventId: insertedEvents[3].id,
-        teamId: insertedTeams[0].id,
-        placement: 10,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 48,
       },
       {
         eventId: insertedEvents[3].id,
-        teamId: insertedTeams[1].id,
-        placement: 9,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 42,
+      },
+      {
+        eventId: insertedEvents[3].id,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 35,
+      },
+      // Proleće 2026 results (Skolski kviz - event index 4)
+      {
+        eventId: insertedEvents[4].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 45,
       },
       {
         eventId: insertedEvents[4].id,
-        teamId: insertedTeams[1].id,
-        placement: 9,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 38,
       },
       {
         eventId: insertedEvents[4].id,
-        teamId: insertedTeams[2].id,
-        placement: 4,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 31,
+      },
+      // Zima 2025 results (Zimski početak - event index 5)
+      {
+        eventId: insertedEvents[5].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 50,
       },
       {
-        eventId: insertedEvents[4].id,
-        teamId: insertedTeams[0].id,
-        placement: 7,
+        eventId: insertedEvents[5].id,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 44,
+      },
+      {
+        eventId: insertedEvents[5].id,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 37,
+      },
+      {
+        eventId: insertedEvents[5].id,
+        teamId: insertedTeams[3].id, // Team Priboj
+        points: 28,
+      },
+      // Zima 2025 results (Muzički izazov - event index 6)
+      {
+        eventId: insertedEvents[6].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 43,
+      },
+      {
+        eventId: insertedEvents[6].id,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 47,
+      },
+      {
+        eventId: insertedEvents[6].id,
+        teamId: insertedTeams[3].id, // Team Priboj
+        points: 39,
+      },
+      {
+        eventId: insertedEvents[6].id,
+        teamId: insertedTeams[4].id, // Team Cacak
+        points: 22,
+      },
+      // Zima 2025 results (Naučna fantastika - event index 7)
+      {
+        eventId: insertedEvents[7].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 49,
+      },
+      {
+        eventId: insertedEvents[7].id,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 41,
+      },
+      {
+        eventId: insertedEvents[7].id,
+        teamId: insertedTeams[3].id, // Team Priboj
+        points: 33,
+      },
+      {
+        eventId: insertedEvents[7].id,
+        teamId: insertedTeams[4].id, // Team Cacak
+        points: 26,
+      },
+      // Zima 2025 results (Istorijski maraton - event index 8)
+      {
+        eventId: insertedEvents[8].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 40,
+      },
+      {
+        eventId: insertedEvents[8].id,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 46,
+      },
+      {
+        eventId: insertedEvents[8].id,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 44,
+      },
+      {
+        eventId: insertedEvents[8].id,
+        teamId: insertedTeams[4].id, // Team Cacak
+        points: 19,
+      },
+      // Zima 2025 results (Novogodišnji finale - event index 9)
+      {
+        eventId: insertedEvents[9].id,
+        teamId: insertedTeams[0].id, // Beogradski Fantom
+        points: 47,
+      },
+      {
+        eventId: insertedEvents[9].id,
+        teamId: insertedTeams[1].id, // Zoki i ekipa
+        points: 42,
+      },
+      {
+        eventId: insertedEvents[9].id,
+        teamId: insertedTeams[2].id, // Maxbet
+        points: 38,
+      },
+      {
+        eventId: insertedEvents[9].id,
+        teamId: insertedTeams[3].id, // Team Priboj
+        points: 34,
+      },
+      {
+        eventId: insertedEvents[9].id,
+        teamId: insertedTeams[4].id, // Team Cacak
+        points: 25,
       },
     ]);
 

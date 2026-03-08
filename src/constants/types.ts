@@ -5,11 +5,11 @@ export type TeamMember = {
   role: string;
 };
 
-export type TeamPlacement = {
+export type TeamPoints = {
   teamId: number;
   teamName: string;
   registrationDate?: string;
-  placement?: number;
+  points?: number;
 };
 
 export type User = {
