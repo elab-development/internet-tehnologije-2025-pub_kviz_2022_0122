@@ -4,21 +4,25 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { signAuthToken, cookieOpts, AUTH_COOKIE } from "@/lib/auth";
+import { z } from "zod";
 
-type Body = {
-  email: string;
-  password: string;
-};
+const loginSchema = z.object({
+  email: z.string().email("Neispravan format email adrese"),
+  password: z.string().min(1, "Lozinka je obavezna"),
+});
 
 export async function POST(req: Request) {
-  const { email, password } = (await req.json()) as Body;
+  const body = await req.json();
+  const result = loginSchema.safeParse(body);
 
-  if (!email || !password) {
+  if (!result.success) {
     return NextResponse.json(
-      { error: "Pogesan email ili lozinka" },
-      { status: 401 },
+      { error: "Pogesan email ili lozinka", details: result.error.flatten() },
+      { status: 400 },
     );
   }
+
+  const { email, password } = result.data;
 
   const [u] = await db.select().from(users).where(eq(users.email, email));
   if (!u) {
