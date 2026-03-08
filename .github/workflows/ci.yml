@@ -47,6 +47,9 @@ jobs:
       - name: Run migrations
         run: npm run db:migrate
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Run e2e tests
         run: npm run test:e2e
 
