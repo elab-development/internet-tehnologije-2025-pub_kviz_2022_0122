@@ -4,6 +4,36 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
+/**
+ * @openapi
+ * /api/users:
+ *   get:
+ *     description: Vraća listu svih korisnika ili jednog korisnika ako se prosledi query parametar `id`.
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: ID korisnika koji se traži
+ *     responses:
+ *       200:
+ *         description: Lista korisnika ili jedan korisnik
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 - $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Niste ulogovani ili je token nevalidan
+ *       404:
+ *         description: Korisnik sa datim ID-jem ne postoji
+ *       500:
+ *         description: Greška na serveru
+ */
 
 export async function GET(req: NextRequest) {
   try {
