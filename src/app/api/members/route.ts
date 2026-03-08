@@ -3,6 +3,42 @@ import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /members:
+ *   get:
+ *     tags: [Teams]
+ *     summary: Dohvati članove tima
+ *     description: Vraća listu članova određenog tima
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         description: ID tima
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista članova tima
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/TeamMember'
+ *       400:
+ *         description: ID tima je obavezan ili nevalidan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Tim nema članova
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const requestedTeamId = searchParams.get("id");

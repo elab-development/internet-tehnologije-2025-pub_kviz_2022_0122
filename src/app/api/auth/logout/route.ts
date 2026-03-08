@@ -1,6 +1,25 @@
 import { AUTH_COOKIE } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Odjava korisnika
+ *     description: Briše autentifikacioni cookie
+ *     responses:
+ *       200:
+ *         description: Uspešna odjava
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ */
 export async function POST() {
   const res = NextResponse.json({ ok: true });
 

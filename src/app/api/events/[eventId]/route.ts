@@ -5,6 +5,102 @@ import { NextResponse } from "next/server";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
 
+/**
+ * @swagger
+ * /events/{eventId}:
+ *   get:
+ *     tags: [Events]
+ *     summary: Dohvati detalje događaja
+ *     description: Vraća detalje o događaju - registrovane timove za predstojeće ili rezultate za završene
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         description: ID događaja
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Detalji događaja
+ *         content:
+ *           application/json:
+ *             schema:
+ *               oneOf:
+ *                 - type: object
+ *                   properties:
+ *                     status:
+ *                       type: string
+ *                       example: UPCOMING
+ *                     teams:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           teamId:
+ *                             type: integer
+ *                           teamName:
+ *                             type: string
+ *                           registrationDate:
+ *                             type: string
+ *                             format: date-time
+ *                 - type: object
+ *                   properties:
+ *                     status:
+ *                       type: string
+ *                       example: FINISHED
+ *                     results:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/EventResult'
+ *       404:
+ *         description: Događaj nije pronađen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     tags: [Events]
+ *     summary: Obriši događaj
+ *     description: Briše događaj (samo admin/organizator)
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         description: ID događaja
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Događaj uspešno obrisan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Događaj je uspešno obrisan
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo administratori i organizatori mogu obrisati događaj
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Događaj nije pronađen
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ eventId: string }> },

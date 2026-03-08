@@ -23,6 +23,108 @@ async function isCaptainOfRegisteredTeam(
   return result.length > 0;
 }
 
+/**
+ * @swagger
+ * /events/{eventId}/registration:
+ *   post:
+ *     tags: [Events]
+ *     summary: Registruj tim za događaj
+ *     description: Prijavljuje tim za učešće na događaju (samo kapiten)
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         description: ID događaja
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [eventId, teamId]
+ *             properties:
+ *               eventId:
+ *                 type: integer
+ *               teamId:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Uspešna registracija
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo kapiten može prijaviti tim
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *   delete:
+ *     tags: [Events]
+ *     summary: Odjavi tim sa događaja
+ *     description: Odjavljuje tim sa događaja (samo kapiten)
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: eventId
+ *         in: path
+ *         description: ID događaja
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [eventId, teamId]
+ *             properties:
+ *               eventId:
+ *                 type: integer
+ *               teamId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Uspešna odjava
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Korisnik nije ulogovan
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Samo kapiten može odjaviti tim
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function POST(req: NextRequest) {
   try {
     const cookieStore = await cookies();
