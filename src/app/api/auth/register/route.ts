@@ -4,19 +4,23 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { AUTH_COOKIE, cookieOpts, signAuthToken } from "@/lib/auth";
+import { z } from "zod";
 
-type Body = {
-    name: string;
-    email: string;
-    password: string;
-}
+const registerSchema = z.object({
+    name: z.string().min(1, "Ime je obavezno").max(100, "Ime je predugačko"),
+    email: z.string().email("Neispravan format email adrese"),
+    password: z.string().min(6, "Lozinka mora imati najmanje 6 karaktera"),
+});
 
 export async function POST(req: Request) {
-    const { name, email, password } = (await req.json()) as Body;
+    const body = await req.json();
+    const result = registerSchema.safeParse(body);
 
-    if (!name || !email || !password) {
-        return NextResponse.json({ error: "Nedostaju podaci" }, { status: 400 })
+    if (!result.success) {
+        return NextResponse.json({ error: "Neispravni podaci", details: result.error.flatten() }, { status: 400 });
     }
+
+    const { name, email, password } = result.data;
 
     const exists = await db.select().from(users).where(eq(users.email, email));
     if (exists.length) {
