@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
-import type { TeamPlacement } from "@/constants/types";
+import type { TeamPoints } from "@/constants/types";
 import Button from "../Button";
 
 interface PastEventSectionProps {
   eventId: string;
-  teams: TeamPlacement[];
-  onTeamsUpdated: (teams: TeamPlacement[]) => void;
+  teams: TeamPoints[];
+  onTeamsUpdated: (teams: TeamPoints[]) => void;
 }
 
 export default function PastEventDetails({
@@ -28,8 +28,8 @@ export default function PastEventDetails({
   useEffect(() => {
     const resultMap: Record<number, number> = {};
     teams.forEach((t) => {
-      if (t.placement) {
-        resultMap[t.teamId] = t.placement;
+      if (t.points) {
+        resultMap[t.teamId] = t.points;
       }
     });
     setResults(resultMap);
@@ -43,10 +43,10 @@ export default function PastEventDetails({
 
     try {
       setSaving(true);
-      const updates = Object.entries(results).map(([teamId, placement]) => ({
+      const updates = Object.entries(results).map(([teamId, points]) => ({
         eventId: parseInt(eventId),
         teamId: parseInt(teamId),
-        placement,
+        points,
       }));
 
       const res = await fetch(`/api/events/${eventId}/results`, {
@@ -83,7 +83,7 @@ export default function PastEventDetails({
   };
 
   const sortedTeams = [...teams].sort(
-    (a, b) => (a.placement || 999) - (b.placement || 999),
+    (a, b) => (a.points || 999) - (b.points || 999),
   );
 
   function getPlacementStyle(place: number) {
@@ -177,7 +177,7 @@ export default function PastEventDetails({
                       <div className="flex items-center gap-2">
                         <span className="text-white/60 text-sm">BROJ BODOVA:</span>
                         <span className="text-2xl font-bold text-pub-orange tabular-nums min-w-[40px] text-right">
-                          {team.placement || "-"}
+                          {team.points || "-"}
                         </span>
                       </div>
                     </div>

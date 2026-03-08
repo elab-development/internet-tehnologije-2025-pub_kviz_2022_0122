@@ -68,7 +68,7 @@ export default function TeamJoinRequest({
   };
 
   return (
-    <div className=" bg-transparent shadow-xl rounded-2xl p-6">
+    <div className="flex-1 bg-transparent shadow-xl rounded-2xl p-6">
       <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
         Zahtevi za članstvo
       </h2>

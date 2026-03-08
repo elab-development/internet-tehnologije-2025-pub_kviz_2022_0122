@@ -48,12 +48,12 @@ export async function GET(
         .select({
           teamId: teams.id,
           teamName: teams.name,
-          placement: eventResults.placement,
+          points: eventResults.points,
         })
         .from(eventResults)
         .innerJoin(teams, eq(eventResults.teamId, teams.id))
         .where(eq(eventResults.eventId, eventId))
-        .orderBy(eventResults.placement);
+        .orderBy(eventResults.points);
 
       return NextResponse.json({
         status: "FINISHED",

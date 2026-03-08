@@ -35,7 +35,7 @@ export default function TeamMembers({ teamData }: TeamMembersProps) {
     return null;
   }
   return (
-    <div className="lg:col-span-2 bg-transparent shadow-xl rounded-2xl p-6">
+    <div className="lg:flex-2 bg-transparent shadow-xl rounded-2xl p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-white flex items-center gap-2">
           Članovi tima
