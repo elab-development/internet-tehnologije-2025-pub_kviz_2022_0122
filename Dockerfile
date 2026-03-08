@@ -18,6 +18,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
@@ -29,9 +30,6 @@ COPY --from=builder /app/dist/seed.cjs ./dist/seed.cjs
 
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
-
-COPY start.sh ./start.sh
-RUN chmod +x ./start.sh
 
 EXPOSE 3000
 
