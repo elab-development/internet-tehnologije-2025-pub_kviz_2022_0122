@@ -198,9 +198,7 @@ export default function EventSection({
 
                     <div className="flex items-center gap-3 text-white/90">
                       <div className="w-full">
-                        <div className="text-xs text-white/60 mb-1">
-                          Cena i Valuta
-                        </div>
+                      
                         <div className="flex items-center gap-3 text-white/90">
                           <div className="w-full">
                             <div className="text-xs text-white/60 mb-1">
