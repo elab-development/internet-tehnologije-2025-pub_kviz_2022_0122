@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { eventRegistrations, eventResults, events, teams } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 import { cookies } from "next/headers";
@@ -149,7 +149,7 @@ export async function GET(
         .from(eventResults)
         .innerJoin(teams, eq(eventResults.teamId, teams.id))
         .where(eq(eventResults.eventId, eventId))
-        .orderBy(eventResults.points);
+        .orderBy(desc(eventResults.points));
 
       return NextResponse.json({
         status: "FINISHED",
