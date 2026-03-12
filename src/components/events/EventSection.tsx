@@ -19,29 +19,6 @@ export default function EventSection({
   const pathname = usePathname();
   const router = useRouter();
 
-  //   useEffect(() => {
-  //   const fetchRates = async () => {
-  //     try {
-  //       const res = await fetch("https://api.exchangerate-api.com/v4/latest/RSD");
-  //       const data = await res.json();
-
-  //       const filteredRates = {
-  //         RSD: 1,
-  //         EUR: data.rates.EUR,
-  //         USD: data.rates.USD,
-  //         CHF: data.rates.CHF,
-  //         GBP: data.rates.GBP,
-  //       };
-
-  //       setRates(filteredRates);
-  //     } catch (err) {
-  //       console.error("Greška pri učitavanju kursne liste:", err);
-  //       setRates({ RSD: 1 });
-  //     }
-  //   };
-
-  //   fetchRates();
-  // }, []);
 
   useEffect(() => {
     if (allEvents) {
