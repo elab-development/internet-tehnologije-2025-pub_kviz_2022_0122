@@ -175,8 +175,10 @@ export default function PastEventDetails({
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-white/60 text-sm">BROJ BODOVA:</span>
-                        <span className="text-2xl font-bold text-pub-orange tabular-nums min-w-[40px] text-right">
+                        <span className="text-white/60 text-sm">
+                          BROJ BODOVA:
+                        </span>
+                        <span className="text-2xl font-bold text-pub-orange tabular-nums min-w-10 text-right">
                           {team.points || "-"}
                         </span>
                       </div>

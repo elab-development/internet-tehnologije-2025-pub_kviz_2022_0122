@@ -2,9 +2,9 @@ name: CI Pipeline
 
 on:
   pull_request:
-    branches: ["develop"] # pokreće se kad praviš PR ka develop
+    branches: ["main"]
   push:
-    branches: ["develop"] # pokreće se i kad direktno pushuješ na develop
+    branches: ["main"]
 
 jobs:
   build-and-test:
