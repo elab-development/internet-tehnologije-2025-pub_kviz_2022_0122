@@ -1,10 +1,10 @@
-# 🍺 Pub Kviz
+# Pub Kviz
 
 Pub Kviz je web aplikacija koja omogućava organizaciju i praćenje pub kviz takmičenja. Korisnici se mogu registrovati i prijaviti na platformu, pridružiti se timovima ili kreirati sopstveni tim, učestvovati u takmičenjima po sezonama, te pratiti rang listu svih timova. Kapiten tima ima posebne privilegije — može prijaviti tim na takmičenje i upravljati zahtevima za članstvo.
 
 ---
 
-## 🛠️ Tehnologije
+## Tehnologije
 
 | Sloj | Tehnologije |
 |------|-------------|
@@ -17,7 +17,7 @@ Pub Kviz je web aplikacija koja omogućava organizaciju i praćenje pub kviz tak
 
 ---
 
-## 🚀 Instalacija i pokretanje
+## Instalacija i pokretanje
 
 ### Preduslovi
 
@@ -79,7 +79,7 @@ Aplikacija će biti dostupna na `http://localhost:3000`.
 
 ---
 
-## 🔐 Environment promenljive
+## Environment promenljive
 
 Kreiraj `.env` fajl u root direktorijumu projekta sa sledećim promenljivama:
 
@@ -95,11 +95,7 @@ NEXTAUTH_URL=http://localhost:3000
 JWT_SECRET=tvoj_jwt_tajni_kljuc
 ```
 
-> ⚠️ Nikada ne commit-uj `.env` fajl u sistem za kontrolu verzija.
-
----
-
-## 📁 Struktura projekta
+## Struktura projekta
 
 ```
 /
@@ -122,7 +118,7 @@ JWT_SECRET=tvoj_jwt_tajni_kljuc
 
 ---
 
-## ✨ Funkcionalnosti
+## Funkcionalnosti
 
 ### Autentifikacija
 - Registracija novog korisnika
@@ -150,7 +146,7 @@ JWT_SECRET=tvoj_jwt_tajni_kljuc
 
 ---
 
-## 📖 Korišćenje
+## Korišćenje
 
 ### Frontend i backend
 
@@ -195,7 +191,7 @@ http://localhost:3000/api-docs
 
 ---
 
-## 🧪 Testiranje
+## Testiranje
 
 Projekat koristi tri vrste testova:
 
@@ -235,7 +231,7 @@ npm run typecheck
 
 ---
 
-## 🌍 Deployment
+## Deployment
 
 ### Aplikacija – Vercel
 
@@ -261,7 +257,7 @@ npm run db:migrate
 
 ---
 
-## 📚 Dodatni resursi
+## Dodatni resursi
 
 - [Next.js dokumentacija](https://nextjs.org/docs)
 - [Drizzle ORM dokumentacija](https://orm.drizzle.team)
@@ -272,10 +268,3 @@ npm run db:migrate
 
 ---
 
-## 👤 Autor
-
-Projekat razvijen kao deo pub kviz platforme.
-
----
-
-*Licenca: Private*
