@@ -83,7 +83,7 @@ export default function PastEventDetails({
   };
 
   const sortedTeams = [...teams].sort(
-    (a, b) => (a.points || 999) - (b.points || 999),
+    (a, b) => (b.points || 0) - (a.points || 0),
   );
 
   function getPlacementStyle(place: number) {
