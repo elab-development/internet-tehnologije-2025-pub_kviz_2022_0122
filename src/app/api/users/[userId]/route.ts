@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { teamJoinRequests, users } from "@/db/schema";
 import { cookies } from "next/headers";
 import { AUTH_COOKIE, verifyAuthToken } from "@/lib/auth";
 /**
@@ -52,6 +52,8 @@ export async function DELETE(
   { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
+    const userId = parseInt((await params).userId, 10);
+
     const cookieStore = await cookies();
     const token = cookieStore.get(AUTH_COOKIE)?.value;
 
@@ -69,7 +71,6 @@ export async function DELETE(
       );
     }
 
-    const userId = parseInt((await params).userId, 10);
 
     const isOwnProfile = parseInt(claims.sub) == userId;
     const isAdmin = claims.role === "ADMIN";
@@ -81,9 +82,23 @@ export async function DELETE(
       );
     }
 
+    await db.delete(teamJoinRequests).where(eq(teamJoinRequests.userId, userId));
+
     await db.delete(users).where(eq(users.id, userId));
 
-    return NextResponse.json({ success: true });
+    if (isOwnProfile) {
+      const res = NextResponse.json({ success: true, loggedOut: true });
+      res.cookies.set(AUTH_COOKIE, "", {
+      httpOnly: true,
+      sameSite: "lax" as const,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 0,
+      expires: new Date(0),
+    });
+      return res;
+    }
+    return NextResponse.json({ success: true, loggedOut: false });
   } catch (error) {
     console.error("Delete user error:", error);
     return NextResponse.json({ error: "Greška na serveru" }, { status: 500 });

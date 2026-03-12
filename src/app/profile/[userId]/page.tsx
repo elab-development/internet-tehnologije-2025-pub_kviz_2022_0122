@@ -93,26 +93,34 @@ export default function ProfilePage({
   const handleDeleteProfile = async () => {
     if (!confirm("Da li ste sigurni da želite da obrišete profil?")) return;
 
-    setIsDeleting(true);
+  setIsDeleting(true);
 
-    try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+  try {
+    const res = await fetch(`/api/users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
 
-      if (!res.ok) {
-        alert("Greška pri brisanju profila");
-        return;
-      }
+    const data = await res.json();
 
-      router.push(`/profile/${currentUser?.id}`);
-    } catch (err) {
-      console.error(err);
-      alert("Greška pri brisanju profila");
-    } finally {
-      setIsDeleting(false);
+    if (!res.ok) {
+      alert(data.error || "Greška pri brisanju profila");
+      return;
     }
+
+    if (data.loggedOut) {
+      logout(); 
+      router.push("/login");
+    } else {
+      alert("Profil uspešno obrisan.");
+      router.push(`/profile/${currentUser?.id}`);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Greška pri brisanju profila");
+  } finally {
+    setIsDeleting(false);
+  }
   };
 
   const handleUpdateProfile = async () => {
